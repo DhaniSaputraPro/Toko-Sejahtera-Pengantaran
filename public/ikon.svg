@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Kurir Toko Sejahtera">
+  <rect width="512" height="512" rx="112" fill="#0a6fd8"/>
+  <g fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 176h176v160H96z"/>
+    <path d="M272 224h64l48 52v60h-112z"/>
+    <circle cx="168" cy="368" r="30" fill="#0a6fd8"/>
+    <circle cx="344" cy="368" r="30" fill="#0a6fd8"/>
+    <path d="M96 336h42m60 0h116"/>
+  </g>
+</svg>

@@ -1,0 +1,381 @@
+/* Aplikasi kurir — dibaca sambil berdiri di tepi jalan, sering di bawah
+   matahari, kadang dengan satu tangan. Tiga hal yang menentukan seluruh gaya
+   di berkas ini:
+
+   1. KONTRAS TINGGI. Abu-abu tipis yang cantik di monitor kantor hilang sama
+      sekali di layar HP di bawah sinar langsung.
+   2. SASARAN KETUKAN BESAR. Tidak ada tombol di bawah 44px; jari yang basah
+      kehujanan tidak bisa mengenai sasaran kecil.
+   3. TIDAK ADA ANIMASI PANJANG. Setiap ketukan harus terasa langsung dijawab. */
+
+:root {
+  --latar: #f2f2f5;
+  --kartu: #ffffff;
+  --teks: #16161a;
+  --teks-lembut: #5c5c66;
+  --teks-samar: #8a8a94;
+  --garis: rgba(0, 0, 0, 0.09);
+  --biru: #0a6fd8;
+  --biru-lembut: #e6f0fd;
+  --hijau: #14803c;
+  --hijau-lembut: #e2f5e9;
+  --kuning: #7a5b16;
+  --kuning-lembut: #fdf2d9;
+  --ungu: #5b34a0;
+  --ungu-lembut: #efe8fb;
+  --merah: #b3261e;
+  --merah-lembut: #fce9e8;
+  --radius: 16px;
+  --bayang: 0 1px 3px rgba(0, 0, 0, 0.07), 0 6px 16px -12px rgba(0, 0, 0, 0.24);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#akar {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--latar);
+  color: var(--teks);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  /* Menahan tarik-untuk-muat-ulang bawaan Chrome Android: kurir menggulir
+     daftar antar dengan ibu jari, dan gulir ke atas dari puncak daftar tidak
+     boleh membuang halaman yang sedang dibaca. */
+  overscroll-behavior-y: contain;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--biru);
+}
+
+/* ------------------------------- kerangka ------------------------------- */
+
+.layar {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 620px;
+  margin: 0 auto;
+  background: var(--latar);
+}
+
+.bilah-atas {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-top, 0px));
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  background: rgba(242, 242, 245, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--garis);
+}
+
+.isi {
+  flex: 1;
+  padding: 14px 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bilah-bawah {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(242, 242, 245, 0.94);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--garis);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.tab {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 10px 4px 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--teks-samar);
+  cursor: pointer;
+}
+
+.tab[aria-current="page"] {
+  color: var(--biru);
+}
+
+/* --------------------------------- kartu -------------------------------- */
+
+.kartu {
+  background: var(--kartu);
+  border-radius: var(--radius);
+  border: 1px solid var(--garis);
+  box-shadow: var(--bayang);
+  padding: 14px;
+}
+
+.kartu-ketuk {
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  cursor: pointer;
+  display: block;
+}
+
+.kartu-ketuk:active {
+  background: #fafafc;
+}
+
+/* -------------------------------- lencana ------------------------------- */
+
+.lencana {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.lencana-biru {
+  background: var(--biru-lembut);
+  color: var(--biru);
+}
+.lencana-hijau {
+  background: var(--hijau-lembut);
+  color: var(--hijau);
+}
+.lencana-kuning {
+  background: var(--kuning-lembut);
+  color: var(--kuning);
+}
+.lencana-ungu {
+  background: var(--ungu-lembut);
+  color: var(--ungu);
+}
+.lencana-merah {
+  background: var(--merah-lembut);
+  color: var(--merah);
+}
+.lencana-abu {
+  background: #eeeef1;
+  color: var(--teks-lembut);
+}
+
+/* -------------------------------- tombol -------------------------------- */
+
+.tombol {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 13px;
+  border: 1px solid var(--garis);
+  background: var(--kartu);
+  color: var(--teks);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.06s ease;
+}
+
+.tombol:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.tombol:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tombol-utama {
+  background: var(--biru);
+  border-color: transparent;
+  color: #fff;
+}
+
+.tombol-hijau {
+  background: var(--hijau);
+  border-color: transparent;
+  color: #fff;
+}
+
+.tombol-bahaya {
+  background: var(--merah-lembut);
+  border-color: rgba(179, 38, 30, 0.22);
+  color: var(--merah);
+}
+
+.tombol-penuh {
+  width: 100%;
+}
+
+.tombol-kecil {
+  min-height: 38px;
+  padding: 0 13px;
+  font-size: 13.5px;
+  border-radius: 11px;
+}
+
+/* -------------------------------- medan --------------------------------- */
+
+.medan {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  border-radius: 13px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: var(--kartu);
+  font-size: 15px;
+  outline: none;
+  resize: vertical;
+}
+
+.medan:focus {
+  border-color: var(--biru);
+  box-shadow: 0 0 0 3px rgba(10, 111, 216, 0.16);
+}
+
+/* ------------------------------- potongan ------------------------------- */
+
+.judul-kecil {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--teks-samar);
+}
+
+.samar {
+  color: var(--teks-samar);
+  font-size: 13px;
+}
+
+.lembut {
+  color: var(--teks-lembut);
+  font-size: 13.5px;
+}
+
+.baris {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.angka {
+  font-variant-numeric: tabular-nums;
+}
+
+.pesan-galat {
+  background: var(--merah-lembut);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  color: var(--merah);
+  border-radius: 13px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* --------------------------------- lembar -------------------------------- */
+
+.tirai {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.42);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: pudar 0.12s ease;
+}
+
+.lembar {
+  width: 100%;
+  max-width: 620px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--latar);
+  border-radius: 22px 22px 0 0;
+  padding: 8px 14px calc(18px + env(safe-area-inset-bottom, 0px));
+  animation: naik 0.16s ease;
+  overscroll-behavior: contain;
+}
+
+.pegangan {
+  width: 38px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.16);
+  margin: 6px auto 12px;
+}
+
+@keyframes pudar {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes naik {
+  from {
+    transform: translateY(14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* --------------------------------- putar --------------------------------- */
+
+.putar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.14);
+  border-top-color: var(--biru);
+  animation: putaran 0.7s linear infinite;
+}
+
+@keyframes putaran {
+  to {
+    transform: rotate(360deg);
+  }
+}

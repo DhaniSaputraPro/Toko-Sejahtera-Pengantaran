@@ -1,0 +1,3 @@
+# Daftar antar memuat alamat rumah pembeli.
+User-agent: *
+Disallow: /
