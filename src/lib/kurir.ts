@@ -76,7 +76,10 @@ function terjemahkan(pesan: string): Error {
     : new Error(pesan);
 }
 
-async function panggil<T>(nama: string, arg: Record<string, unknown>): Promise<T> {
+async function panggil<T>(
+  nama: string,
+  arg: Record<string, unknown>,
+): Promise<T> {
   try {
     return await rpc<T>(nama, arg);
   } catch (e) {
@@ -85,7 +88,9 @@ async function panggil<T>(nama: string, arg: Record<string, unknown>): Promise<T
 }
 
 /** Tukar token undangan dari QR dengan sesi peranti. */
-export const masuk = (undangan: string): Promise<{ token: string; kurir: ProfilKurir }> =>
+export const masuk = (
+  undangan: string,
+): Promise<{ token: string; kurir: ProfilKurir }> =>
   rpc("kurir_masuk", {
     p_undangan: undangan,
     // Sekadar penanda supaya admin bisa mengenali peranti mana yang dicabut.
@@ -95,7 +100,13 @@ export const masuk = (undangan: string): Promise<{ token: string; kurir: ProfilK
 /* --------------------------- surat jalan (rit) --------------------------- */
 
 export interface IntipRit {
+  /**
+   * Nomor serinya (`RIT-00018`). Berurut dan dijamin unik, tapi tidak berarti
+   * apa-apa bagi orang — jadi ditampilkan kecil, di bawah namanya.
+   */
   kode: string;
+  /** Nama yang diberi toko, mis. "Abepura sore". Bisa kosong. */
+  nama: string;
   upah: number;
   jumlah: number;
   /**
@@ -139,7 +150,12 @@ export interface IsianDaftar {
 export const klaimRit = (
   token: string,
   d: IsianDaftar,
-): Promise<{ token: string; kurir: ProfilKurir; kurir_baru: boolean; rit: IntipRit }> =>
+): Promise<{
+  token: string;
+  kurir: ProfilKurir;
+  kurir_baru: boolean;
+  rit: IntipRit;
+}> =>
   rpc("rit_klaim", {
     p_token: token,
     p_nama: d.nama,
@@ -156,7 +172,10 @@ export const ambilTugas = (): Promise<Tugas[]> =>
   panggil<Tugas[]>("kurir_tugas", { p_token: token() }).then((t) => t ?? []);
 
 export const ambilRiwayat = (batas = 30): Promise<Riwayat[]> =>
-  panggil<Riwayat[]>("kurir_riwayat", { p_token: token(), p_batas: batas }).then((t) => t ?? []);
+  panggil<Riwayat[]>("kurir_riwayat", {
+    p_token: token(),
+    p_batas: batas,
+  }).then((t) => t ?? []);
 
 export const jemput = (pesananId: string): Promise<unknown> =>
   panggil("kurir_jemput", { p_token: token(), p_pesanan_id: pesananId });
@@ -174,7 +193,11 @@ export const selesaikan = (
   });
 
 export const gagalkan = (pesananId: string, alasan: string): Promise<unknown> =>
-  panggil("kurir_gagal", { p_token: token(), p_pesanan_id: pesananId, p_alasan: alasan });
+  panggil("kurir_gagal", {
+    p_token: token(),
+    p_pesanan_id: pesananId,
+    p_alasan: alasan,
+  });
 
 /**
  * Laporkan posisi. Sengaja tidak melempar galat.
@@ -200,13 +223,17 @@ export async function laporPosisi(lat: number, lng: number): Promise<void> {
  * dan melonggarkannya untuk anon berarti membukanya untuk siapa pun yang
  * memegang kunci publikasi.
  */
-export async function unggahBukti(pesananId: string, berkas: Blob): Promise<string> {
+export async function unggahBukti(
+  pesananId: string,
+  berkas: Blob,
+): Promise<string> {
   const form = new FormData();
   form.append("token", token());
   form.append("pesanan_id", pesananId);
   form.append("foto", berkas, "bukti.jpg");
 
   const { url } = await fungsi<{ url?: string }>("kurir-bukti", form);
-  if (!url) throw new Error("Foto terunggah tapi alamatnya tidak dikembalikan.");
+  if (!url)
+    throw new Error("Foto terunggah tapi alamatnya tidak dikembalikan.");
   return url;
 }

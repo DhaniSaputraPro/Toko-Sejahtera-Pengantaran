@@ -4,7 +4,14 @@ import { simpanSesi, type ProfilKurir } from "@/lib/sesi";
 import { rp } from "@/lib/format";
 import { IkonPaket, IkonPeringatan, IkonTruk } from "@/komponen/Ikon";
 
-const KENDARAAN = ["Motor", "Motor + box", "Mobil", "Pikap bak terbuka", "Pikap box", "Truk engkel"];
+const KENDARAAN = [
+  "Motor",
+  "Motor + box",
+  "Mobil",
+  "Pikap bak terbuka",
+  "Pikap box",
+  "Truk engkel",
+];
 
 /**
  * Jalur masuk KEDUA: mitra memindai QR pada surat jalan cetak dan mengisi
@@ -43,7 +50,9 @@ export function LayarDaftar({
       try {
         setRit(await intipRit(token));
       } catch (e) {
-        setGalatAwal(e instanceof Error ? e.message : "Surat jalan tidak terbaca.");
+        setGalatAwal(
+          e instanceof Error ? e.message : "Surat jalan tidak terbaca.",
+        );
       }
     })();
   }, [token]);
@@ -81,7 +90,12 @@ export function LayarDaftar({
       <div className="layar">
         <div
           className="isi"
-          style={{ justifyContent: "center", alignItems: "center", textAlign: "center", gap: 18 }}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            gap: 18,
+          }}
         >
           <span style={{ color: "var(--merah)" }}>
             <IkonPeringatan ukuran={44} />
@@ -95,8 +109,8 @@ export function LayarDaftar({
             </div>
           </div>
           <div className="samar" style={{ maxWidth: 330 }}>
-            Kode pada lembar berlaku sehari, dan hangus begitu toko mencetak lembar baru untuk
-            rit yang sama.
+            Kode pada lembar berlaku sehari, dan hangus begitu toko mencetak
+            lembar baru untuk rit yang sama.
           </div>
         </div>
       </div>
@@ -132,13 +146,21 @@ export function LayarDaftar({
         </div>
 
         {rit && (
-          <div className="kartu" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div
+            className="kartu"
+            style={{ display: "flex", alignItems: "center", gap: 14 }}
+          >
             <span style={{ color: "var(--biru)" }}>
               <IkonPaket ukuran={26} />
             </span>
             <span style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ display: "block", fontWeight: 700, fontSize: 16 }}>{rit.kode}</span>
-              <span className="samar">{rit.jumlah} tujuan</span>
+              <span style={{ display: "block", fontWeight: 700, fontSize: 16 }}>
+                {rit.nama?.trim() || rit.kode}
+              </span>
+              <span className="samar">
+                {rit.nama?.trim() ? `${rit.kode} · ` : ""}
+                {rit.jumlah} tujuan
+              </span>
             </span>
             <span style={{ textAlign: "right" }}>
               <span className="samar" style={{ display: "block" }}>
@@ -163,17 +185,29 @@ export function LayarDaftar({
         {diambil && (
           <div
             className="kartu"
-            style={{ background: "var(--kuning-lembut)", borderColor: "transparent" }}
+            style={{
+              background: "var(--kuning-lembut)",
+              borderColor: "transparent",
+            }}
           >
-            <div style={{ fontWeight: 700, marginBottom: 4, color: "var(--kuning)" }}>
+            <div
+              style={{
+                fontWeight: 700,
+                marginBottom: 4,
+                color: "var(--kuning)",
+              }}
+            >
               Kurir lain lebih cepat
             </div>
             <div className="lembut" style={{ color: "var(--kuning)" }}>
               Tidak apa-apa — tunggu sebaran berikutnya dari toko.
               <br />
               <br />
-              <strong style={{ fontWeight: 600 }}>Kalau antaran ini milik Anda</strong> dan HP Anda
-              bermasalah, isi nomor WhatsApp yang <em>sama</em> di bawah untuk masuk lagi.
+              <strong style={{ fontWeight: 600 }}>
+                Kalau antaran ini milik Anda
+              </strong>{" "}
+              dan HP Anda bermasalah, isi nomor WhatsApp yang <em>sama</em> di
+              bawah untuk masuk lagi.
             </div>
           </div>
         )}
@@ -207,8 +241,9 @@ export function LayarDaftar({
               disabled={kirim}
             />
             <span className="samar">
-              Dipakai toko untuk menghubungi Anda — dan untuk mengenali Anda saat memindai surat
-              jalan berikutnya, supaya akun Anda tidak terbuat dua kali.
+              Dipakai toko untuk menghubungi Anda — dan untuk mengenali Anda
+              saat memindai surat jalan berikutnya, supaya akun Anda tidak
+              terbuat dua kali.
             </span>
           </label>
 
