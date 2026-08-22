@@ -379,3 +379,122 @@ a {
     transform: rotate(360deg);
   }
 }
+
+/* ------------------------------- pemindai -------------------------------- */
+
+/* Satu layar penuh, hitam, tanpa apa pun yang tidak membantu mengarahkan
+   lensa. Yang dilihat kurir sambil memindai cuma kotak dan satu kalimat. */
+
+.pemindai {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.pemindai-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* cover, bukan contain: bilah hitam di kiri-kanan membuat kotak bidiknya
+     tidak lagi menunjuk bagian gambar yang benar. */
+  object-fit: cover;
+}
+
+.pemindai-lapis {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px
+    calc(18px + env(safe-area-inset-bottom, 0px));
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.pemindai-atas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.pemindai-tengah {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+
+/* Bayangan sebesar layar dipakai sebagai peneduh: bagian di LUAR kotak jadi
+   gelap tanpa perlu empat kotak penutup yang harus diukur ulang tiap layar. */
+.pemindai-kotak {
+  width: min(68vw, 250px);
+  aspect-ratio: 1;
+  border: 3px solid rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+}
+
+.pemindai-bawah {
+  display: flex;
+  flex-direction: column;
+}
+
+.pemindai-pesan {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 13px;
+  padding: 11px 13px;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.pemindai-pesan-salah {
+  background: rgba(179, 38, 30, 0.9);
+}
+
+.pemindai-galat {
+  background: var(--kartu);
+  color: var(--teks);
+  border-radius: var(--radius);
+  padding: 18px;
+  max-width: 340px;
+  text-align: center;
+}
+
+.pemindai-galat svg {
+  color: var(--merah);
+}
+
+.tombol-gelap {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.tombol-bulat {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  cursor: pointer;
+}
+
+.putar-terang {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+}

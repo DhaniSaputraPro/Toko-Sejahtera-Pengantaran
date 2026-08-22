@@ -2,20 +2,25 @@ import { useCallback, useEffect, useState } from "react";
 import { SesiTidakBerlaku, ambilRiwayat, type Riwayat } from "@/lib/kurir";
 import type { ProfilKurir } from "@/lib/sesi";
 import { rp, tampilTelepon, tanggalJam } from "@/lib/format";
-import { IkonKeluar, IkonOrang, IkonPaket, IkonTruk } from "@/komponen/Ikon";
+import { Pemindai } from "@/komponen/Pemindai";
+import { jalurDari, kameraAda } from "@/lib/pindai";
+import { IkonKeluar, IkonOrang, IkonPaket, IkonQr, IkonTruk } from "@/komponen/Ikon";
 
 export function LayarSaya({
   profil,
+  buka,
   keluar,
   keluarSesi,
 }: {
   profil: ProfilKurir | null;
+  buka: (jalur: string) => void;
   keluar: () => void;
   keluarSesi: () => void;
 }) {
   const [riwayat, setRiwayat] = useState<Riwayat[] | null>(null);
   const [galat, setGalat] = useState("");
   const [pastikan, setPastikan] = useState(false);
+  const [pindai, setPindai] = useState(false);
 
   const muat = useCallback(async () => {
     try {
@@ -84,6 +89,26 @@ export function LayarSaya({
         <div className="lembut">antaran selesai</div>
       </div>
 
+      {/* Surat jalan sampai ke tangan kurir SETELAH ia masuk — dititipkan staf
+          gudang, kadang di tengah rute. Tanpa tombol ini ia harus keluar dari
+          aplikasi, membuka kamera bawaan, dan kembali lewat peramban ke tempat
+          yang sedang dipegangnya. */}
+      {kameraAda() && (
+        <div className="kartu">
+          <div className="judul-kecil" style={{ marginBottom: 6 }}>
+            Surat jalan
+          </div>
+          <div className="lembut" style={{ marginBottom: 10 }}>
+            Dapat lembar surat jalan dari toko? Pindai QR di lembarnya untuk mengambil seluruh
+            ritnya sekaligus. Anda akan diminta mengisi nomor WhatsApp yang sama seperti sekarang.
+          </div>
+          <button className="tombol tombol-penuh" onClick={() => setPindai(true)}>
+            <IkonQr ukuran={18} />
+            Pindai surat jalan
+          </button>
+        </div>
+      )}
+
       <div className="judul-kecil" style={{ padding: "4px 4px 0" }}>
         Riwayat antaran
       </div>
@@ -139,6 +164,20 @@ export function LayarSaya({
           {pastikan ? "Ketuk sekali lagi untuk keluar" : "Keluar dari aplikasi"}
         </button>
       </div>
+
+      {pindai && (
+        <Pemindai
+          judul="Pindai surat jalan"
+          petunjuk="Arahkan ke QR di lembar surat jalan."
+          tutup={() => setPindai(false)}
+          terima={(teks) => {
+            const jalur = jalurDari(teks);
+            if (!jalur) return false;
+            buka(jalur);
+            return true;
+          }}
+        />
+      )}
     </div>
   );
 }

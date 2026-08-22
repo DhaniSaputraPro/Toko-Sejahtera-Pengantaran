@@ -1,20 +1,27 @@
 import { useState } from "react";
+import { Pemindai } from "@/komponen/Pemindai";
+import { jalurDari, kameraAda } from "@/lib/pindai";
 import { IkonQr, IkonTruk } from "@/komponen/Ikon";
 
 /**
  * Layar sebelum ada sesi apa pun.
  *
- * Selain menerangkan cara masuk, ia menyediakan satu jalan cadangan: menempel
- * tautan undangan. Itu bukan kemewahan — kamera bawaan sebagian HP membuka
- * tautan hasil pindaian di peramban dalam-aplikasi (Instagram, WhatsApp,
- * Google Lens) yang punya penyimpanan sendiri. Sesinya tersimpan di sana, lalu
- * hilang begitu peramban itu ditutup. Menempel tautannya ke peramban biasa
- * membuat masuknya menempel di tempat yang benar.
+ * Tiga jalan masuk, dan urutannya di layar mengikuti seberapa sering dipakai:
+ *
+ * 1. **Memindai dari dalam aplikasi.** Jalan utama. Kamera bawaan HP membuka
+ *    hasil pindaiannya di peramban, dan itu belum tentu tempat aplikasi ini
+ *    berada — lihat `src/lib/pindai.ts`.
+ * 2. Memindai dengan kamera bawaan HP. Tetap bekerja, dan tetap diterangkan:
+ *    kurir yang belum memasang aplikasi ini memang harus lewat sana sekali.
+ * 3. Menempel tautan undangan. Jalan cadangan untuk peranti yang kameranya
+ *    tidak bisa dipakai peramban sama sekali.
  */
 export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
   const [tautan, setTautan] = useState("");
+  const [pindai, setPindai] = useState(false);
 
   const tujuan = jalurDari(tautan);
+  const bisaPindai = kameraAda();
 
   return (
     <div className="layar">
@@ -40,6 +47,13 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           </div>
         </div>
 
+        {bisaPindai && (
+          <button className="tombol tombol-utama tombol-penuh" onClick={() => setPindai(true)}>
+            <IkonQr ukuran={20} />
+            Pindai QR
+          </button>
+        )}
+
         <div className="kartu">
           <div className="baris" style={{ gap: 10, marginBottom: 10 }}>
             <span style={{ color: "var(--biru)" }}>
@@ -53,7 +67,11 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           >
             <li>Datang ke toko dan sebutkan nama serta nomor WhatsApp Anda.</li>
             <li>Admin membuatkan akun dan menampilkan kode QR di layarnya.</li>
-            <li>Pindai QR itu dengan kamera HP Anda — aplikasi ini akan terbuka sendiri.</li>
+            <li>
+              {bisaPindai
+                ? "Ketuk Pindai QR di atas, lalu arahkan kamera ke layar admin."
+                : "Pindai QR itu dengan kamera HP Anda — aplikasi ini akan terbuka sendiri."}
+            </li>
           </ol>
           <div className="samar" style={{ marginTop: 10 }}>
             QR berlaku 20 menit dan hanya sekali pakai.
@@ -75,7 +93,7 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
             spellCheck={false}
           />
           <button
-            className="tombol tombol-utama tombol-penuh"
+            className="tombol tombol-penuh"
             style={{ marginTop: 10 }}
             disabled={!tujuan}
             onClick={() => tujuan && buka(tujuan)}
@@ -89,29 +107,20 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           )}
         </div>
       </div>
+
+      {pindai && (
+        <Pemindai
+          judul="Pindai QR"
+          petunjuk="Arahkan ke QR di layar admin atau di surat jalan."
+          tutup={() => setPindai(false)}
+          terima={(teks) => {
+            const jalur = jalurDari(teks);
+            if (!jalur) return false;
+            buka(jalur);
+            return true;
+          }}
+        />
+      )}
     </div>
   );
-}
-
-/**
- * Ubah apa pun yang ditempel jadi jalur yang benar.
- *
- * Ada DUA bentuk tautan yang sah, dan keduanya berujung di layar yang berbeda:
- * `/masuk/<token>` untuk undangan dari halaman Kurir, `/rit/<token>` untuk QR
- * pada surat jalan cetak. Menebak salah satu berarti mitra dibawa ke layar yang
- * menolak tokennya dengan alasan yang tidak masuk akal baginya.
- *
- * Kalau yang ditempel cuma tokennya saja — tanpa jalur — tidak ada cara
- * membedakannya, dan `/masuk/` dipilih karena itulah bentuk yang dibagikan
- * lewat tombol "Salin tautan" di halaman Kurir.
- *
- * Sengaja tidak memakai `new URL()` sebagai satu-satunya jalan: yang tertempel
- * sering sudah terpotong, dan potongannya masih bisa dipakai.
- */
-function jalurDari(teks: string): string | null {
-  const bersih = teks.trim();
-  const cocok = bersih.match(/[0-9a-f]{64}/i);
-  if (!cocok) return null;
-  const token = cocok[0].toLowerCase();
-  return /\/rit\//i.test(bersih) ? `/rit/${token}` : `/masuk/${token}`;
 }

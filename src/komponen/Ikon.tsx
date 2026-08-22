@@ -188,3 +188,15 @@ export const IkonKeluar = (p: P) => (
     }
   />
 );
+
+export const IkonSenter = (p: P) => (
+  <Bingkai
+    {...p}
+    anak={
+      <>
+        <path d="M6 3h12v3l-3.5 4V21h-5v-11L6 6z" />
+        <path d="M6 6h12" />
+      </>
+    }
+  />
+);

@@ -29,7 +29,9 @@ jalan kesepuluh tidak melahirkan akun kesepuluh.
 
 ## Yang bisa dilakukan kurir
 
-- Masuk dengan **memindai QR** dari layar admin, atau dari surat jalan cetak.
+- Masuk dengan **memindai QR** dari layar admin, atau dari surat jalan cetak —
+  pemindainya ada **di dalam aplikasi**, tidak perlu keluar ke kamera bawaan.
+- Mengambil **rit baru** di tengah rute dengan memindai surat jalan dari tab Saya.
 - Melihat daftar antaran, **terurut dari yang paling dekat dengan posisinya**.
 - Menekan **Navigasi** untuk membuka arahan belok-per-belok di Google Maps.
 - Menandai **sudah dijemput** di toko, dan **selesai** di tujuan.
@@ -82,6 +84,43 @@ jaringan seluler.
 
 Yang paling tidak terpakai justru bagian auth-nya: kurir **tidak punya akun
 Supabase**. Yang dipegangnya token sesi peranti yang dikirim sebagai argumen RPC.
+
+### Pemindai QR ada di dalam aplikasi
+
+Dulu seluruh pemindaian diserahkan ke kamera bawaan HP: QR memuat URL, kameranya
+membuka URL itu. Tiga hal membuat cara itu gagal justru pada kurir yang sudah
+memakai aplikasi ini:
+
+1. Aplikasinya **terpasang sebagai PWA**. Tautan yang dibuka kamera bawaan
+   mendarat di peramban, bukan di aplikasi terpasang — dan sesinya tersimpan di
+   penyimpanan peramban itu, terpisah dari aplikasinya.
+2. Sebagian kamera bawaan membuka hasil pindaian di **peramban dalam-aplikasi**
+   (Lens, WhatsApp) yang penyimpanannya dibuang begitu ditutup.
+3. **Surat jalan** sampai ke tangan kurir setelah ia masuk, kadang di tengah
+   rute. Menyuruhnya keluar ke aplikasi kamera untuk kembali ke tempat yang
+   sedang dipegangnya adalah jalan memutar tanpa alasan.
+
+Tombol **Pindai QR** ada di layar masuk, dan **Pindai surat jalan** di tab Saya.
+Keduanya memakai `src/komponen/Pemindai.tsx`; yang menilai isi QR-nya bukan
+pemindai melainkan layar pemanggilnya, lewat `terima` — QR asing tidak menutup
+kamera, cuma dijawab satu kalimat sambil pemindaian terus berjalan.
+
+Jalan lama tidak dicabut. Kamera bawaan tetap bekerja untuk kurir yang belum
+memasang aplikasi ini, dan tempel-tautan tetap ada untuk peranti yang kameranya
+tidak bisa dipakai peramban.
+
+#### `BarcodeDetector` dulu, jsQR kalau tidak ada
+
+Chrome Android — peramban hampir semua kurir — sudah memuat `BarcodeDetector`,
+dan pembacaannya dikerjakan kode asli peramban. iOS Safari belum punya, jadi
+`jsqr` diunduh lewat `import()` dinamis **saat pemindai dibuka dan hanya bila
+dibutuhkan**: 47 KB terkompresi yang tidak pernah menyentuh HP Android. Bundel
+utamanya naik 2,4 KB terkompresi (71,5 → 73,9 KB).
+
+Sebagian Android punya kelas `BarcodeDetector` tapi tidak punya modul
+pemindainya — Play Services yang dipangkas vendor — dan gagalnya baru terlihat
+di panggilan `detect()` pertama, bukan saat kelasnya dibuat. `buatPembaca()`
+pindah ke jsQR sekali di titik itu, lalu jsQR seterusnya.
 
 ### Tidak ada pustaka router
 
