@@ -165,6 +165,7 @@ export function Aplikasi() {
       ) : (
         <LayarSaya
           profil={profil}
+          buka={pindah}
           keluar={() => {
             hapusSesi();
             setAdaSesi(false);
