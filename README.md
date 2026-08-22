@@ -10,9 +10,26 @@ di admin, QR dari admin tidak akan pernah dikenali.**
 Mekanisme lengkapnya, termasuk sisi admin dan alasan tiap keputusan basis data,
 ada di `docs/KURIR-DAN-PENGANTARAN.md` pada repo Platform.
 
+## Dua jalur masuk
+
+| | `/masuk/<token>` | `/rit/<token>` |
+| --- | --- | --- |
+| Dipindai dari | Layar admin | Lembar **surat jalan** yang dicetak |
+| Data mitra diketik oleh | Admin, sebelumnya | Mitra sendiri, di layar ini |
+| Umur token | 20 menit | 1 hari |
+| Yang didapat | Sesi peranti saja | Sesi **dan** seluruh rit sekaligus |
+
+Sengaja dua alamat, bukan satu: yang pertama sekadar membuka pintu untuk mitra
+yang datanya sudah dikenal toko, yang kedua meminta mitra memperkenalkan diri
+lalu menyerahkan seluruh perjalanan kepadanya. Satu alamat untuk dua maksud akan
+memaksa `App.tsx` menebak yang mana yang dimaksud.
+
+Pada jalur kedua, mitra dicocokkan lewat **nomor WhatsApp** — memindai surat
+jalan kesepuluh tidak melahirkan akun kesepuluh.
+
 ## Yang bisa dilakukan kurir
 
-- Masuk dengan **memindai QR** dari layar admin. Tidak ada email, tidak ada sandi.
+- Masuk dengan **memindai QR** dari layar admin, atau dari surat jalan cetak.
 - Melihat daftar antaran, **terurut dari yang paling dekat dengan posisinya**.
 - Menekan **Navigasi** untuk membuka arahan belok-per-belok di Google Maps.
 - Menandai **sudah dijemput** di toko, dan **selesai** di tujuan.

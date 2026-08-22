@@ -92,6 +92,55 @@ export const masuk = (undangan: string): Promise<{ token: string; kurir: ProfilK
     p_peranti: navigator.userAgent.slice(0, 180),
   });
 
+/* --------------------------- surat jalan (rit) --------------------------- */
+
+export interface IntipRit {
+  kode: string;
+  upah: number;
+  jumlah: number;
+  /** true bila rit ini sudah berjalan — berarti ini pemindaian ulang. */
+  sudah_jalan: boolean;
+}
+
+/**
+ * Lihat ringkas surat jalan sebelum mengisi formulir.
+ *
+ * Hanya kode, upah, dan cacah tujuan — tanpa nama pembeli, tanpa alamat.
+ * Gunanya menolak lembar kedaluwarsa SEBELUM mitra mengetik empat kolom, bukan
+ * sesudahnya.
+ */
+export const intipRit = (token: string): Promise<IntipRit> =>
+  rpc<IntipRit>("rit_intip", { p_token: token });
+
+export interface IsianDaftar {
+  nama: string;
+  wa: string;
+  plat: string;
+  jenis: string;
+}
+
+/**
+ * Daftar sebagai kurir rit ini, lalu langsung memegangnya.
+ *
+ * Satu panggilan mengerjakan semuanya: mencocokkan atau membuat akun kurir dari
+ * nomor WhatsApp, membuka sesi di HP ini, dan menyatakan seluruh paket rit
+ * sudah dijemput. Kalau satu pesanan ditolak — misalnya belum dibayar dan bukan
+ * COD — tidak ada satu pun yang jadi, dan tidak ada akun setengah jadi yang
+ * tertinggal.
+ */
+export const klaimRit = (
+  token: string,
+  d: IsianDaftar,
+): Promise<{ token: string; kurir: ProfilKurir; kurir_baru: boolean; rit: IntipRit }> =>
+  rpc("rit_klaim", {
+    p_token: token,
+    p_nama: d.nama,
+    p_wa: d.wa,
+    p_plat: d.plat,
+    p_jenis: d.jenis,
+    p_peranti: navigator.userAgent.slice(0, 180),
+  });
+
 export const profilSaya = (): Promise<ProfilKurir> =>
   panggil<ProfilKurir>("kurir_saya", { p_token: token() });
 

@@ -3,6 +3,7 @@ import { konfigurasiLengkap } from "@/lib/supabase";
 import { SesiTidakBerlaku, profilSaya } from "@/lib/kurir";
 import { ambilToken, hapusSesi, profilTersimpan, type ProfilKurir } from "@/lib/sesi";
 import { LayarMasuk } from "@/layar/Masuk";
+import { LayarDaftar } from "@/layar/Daftar";
 import { LayarBelumMasuk } from "@/layar/BelumMasuk";
 import { LayarTugas } from "@/layar/Tugas";
 import { LayarSaya } from "@/layar/Saya";
@@ -70,6 +71,26 @@ export function Aplikasi() {
   }, [adaSesi, keluarSesi]);
 
   if (!konfigurasiLengkap) return <LayarKonfigurasi />;
+
+  // Dua jalur masuk, dan sengaja dua alamat. `/masuk/` untuk mitra yang datanya
+  // sudah diketik admin; `/rit/` untuk mitra yang memperkenalkan diri sendiri
+  // lewat surat jalan cetak. Satu alamat untuk dua maksud akan memaksa layar
+  // ini menebak yang mana yang dimaksud.
+  const suratJalan = jalur.match(/^\/rit\/([0-9a-f]{64})\/?$/i);
+  if (suratJalan) {
+    return (
+      <LayarDaftar
+        token={suratJalan[1].toLowerCase()}
+        selesai={(p) => {
+          setProfil(p);
+          setAdaSesi(true);
+          setTerputus(false);
+          setTab("tugas");
+          pindah("/");
+        }}
+      />
+    );
+  }
 
   const undangan = jalur.match(/^\/masuk\/([0-9a-f]{64})\/?$/i);
   if (undangan) {

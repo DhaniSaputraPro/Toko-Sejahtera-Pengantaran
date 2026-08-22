@@ -1,0 +1,234 @@
+import { useEffect, useRef, useState } from "react";
+import { intipRit, klaimRit, type IntipRit } from "@/lib/kurir";
+import { simpanSesi, type ProfilKurir } from "@/lib/sesi";
+import { rp } from "@/lib/format";
+import { IkonPaket, IkonPeringatan, IkonTruk } from "@/komponen/Ikon";
+
+const KENDARAAN = ["Motor", "Motor + box", "Mobil", "Pikap bak terbuka", "Pikap box", "Truk engkel"];
+
+/**
+ * Jalur masuk KEDUA: mitra memindai QR pada surat jalan cetak dan mengisi
+ * datanya sendiri.
+ *
+ * Bedanya dengan `/masuk/<token>`: di sana data mitra SUDAH diketik admin dan
+ * memindai cukup membuka pintu. Di sini toko belum mengenal orangnya — yang
+ * dicetak cuma ritnya — jadi mitra yang memperkenalkan diri, lalu rit itu
+ * langsung jadi miliknya.
+ *
+ * Ritnya diintip lebih dulu. Menolak surat jalan kedaluwarsa setelah mitra
+ * mengetik empat kolom adalah cara paling mahal menyampaikan penolakan.
+ */
+export function LayarDaftar({
+  token,
+  selesai,
+}: {
+  token: string;
+  selesai: (profil: ProfilKurir) => void;
+}) {
+  const [rit, setRit] = useState<IntipRit | null>(null);
+  const [galatAwal, setGalatAwal] = useState("");
+  const [galat, setGalat] = useState("");
+  const [kirim, setKirim] = useState(false);
+
+  const [nama, setNama] = useState("");
+  const [wa, setWa] = useState("");
+  const [plat, setPlat] = useState("");
+  const [jenis, setJenis] = useState("");
+  const sudah = useRef(false);
+
+  useEffect(() => {
+    if (sudah.current) return;
+    sudah.current = true;
+    void (async () => {
+      try {
+        setRit(await intipRit(token));
+      } catch (e) {
+        setGalatAwal(e instanceof Error ? e.message : "Surat jalan tidak terbaca.");
+      }
+    })();
+  }, [token]);
+
+  // Cerminan syarat di `rit_klaim`. Ada di sini supaya tombolnya tidak
+  // mengundang ditekan untuk kemudian ditolak; yang menegakkan tetap server.
+  const angkaWa = wa.replace(/\D/g, "");
+  const boleh = nama.trim().length > 0 && angkaWa.length >= 9;
+
+  async function daftar() {
+    setKirim(true);
+    setGalat("");
+    try {
+      const hasil = await klaimRit(token, {
+        nama: nama.trim(),
+        wa: wa.trim(),
+        plat: plat.trim(),
+        jenis: jenis.trim(),
+      });
+      simpanSesi(hasil.token, hasil.kurir);
+      selesai(hasil.kurir);
+    } catch (e) {
+      setGalat(e instanceof Error ? e.message : "Gagal mendaftar.");
+      setKirim(false);
+    }
+  }
+
+  if (galatAwal) {
+    return (
+      <div className="layar">
+        <div
+          className="isi"
+          style={{ justifyContent: "center", alignItems: "center", textAlign: "center", gap: 18 }}
+        >
+          <span style={{ color: "var(--merah)" }}>
+            <IkonPeringatan ukuran={44} />
+          </span>
+          <div>
+            <div style={{ fontSize: 19, fontWeight: 700, marginBottom: 6 }}>
+              Surat jalan tidak berlaku
+            </div>
+            <div className="lembut" style={{ maxWidth: 330 }}>
+              {galatAwal}
+            </div>
+          </div>
+          <div className="samar" style={{ maxWidth: 330 }}>
+            Kode pada lembar berlaku sehari, dan hangus begitu toko mencetak lembar baru untuk
+            rit yang sama.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="layar">
+      <div className="isi">
+        <div style={{ textAlign: "center", paddingTop: 8 }}>
+          <span
+            style={{
+              display: "inline-grid",
+              placeItems: "center",
+              width: 60,
+              height: 60,
+              borderRadius: 20,
+              background: "var(--biru-lembut)",
+              color: "var(--biru)",
+              marginBottom: 12,
+            }}
+          >
+            <IkonTruk ukuran={29} />
+          </span>
+          <div style={{ fontSize: 21, fontWeight: 700 }}>
+            {rit?.sudah_jalan ? "Masuk kembali" : "Ambil antaran ini"}
+          </div>
+          <div className="lembut" style={{ marginTop: 4 }}>
+            {rit?.sudah_jalan
+              ? "Rit ini sudah Anda pegang. Isi nomor WhatsApp yang sama untuk masuk lagi."
+              : "Isi data Anda, lalu daftar antaran langsung terbuka di HP ini."}
+          </div>
+        </div>
+
+        {rit && (
+          <div className="kartu" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <span style={{ color: "var(--biru)" }}>
+              <IkonPaket ukuran={26} />
+            </span>
+            <span style={{ flex: 1, minWidth: 0 }}>
+              <span style={{ display: "block", fontWeight: 700, fontSize: 16 }}>{rit.kode}</span>
+              <span className="samar">{rit.jumlah} tujuan</span>
+            </span>
+            <span style={{ textAlign: "right" }}>
+              <span className="samar" style={{ display: "block" }}>
+                Upah
+              </span>
+              <span
+                className="angka"
+                style={{ fontSize: 19, fontWeight: 800, color: "var(--biru)" }}
+              >
+                {rp(rit.upah)}
+              </span>
+            </span>
+          </div>
+        )}
+
+        {galat && <div className="pesan-galat">{galat}</div>}
+
+        <div className="kartu" style={{ display: "grid", gap: 14 }}>
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="judul-kecil">
+              Nama <span style={{ color: "var(--merah)" }}>*</span>
+            </span>
+            <input
+              className="medan"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              placeholder="Nama lengkap Anda"
+              autoComplete="name"
+              disabled={kirim}
+            />
+          </label>
+
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="judul-kecil">
+              Nomor WhatsApp <span style={{ color: "var(--merah)" }}>*</span>
+            </span>
+            <input
+              className="medan"
+              value={wa}
+              onChange={(e) => setWa(e.target.value)}
+              placeholder="0852-1234-5678"
+              inputMode="tel"
+              autoComplete="tel"
+              disabled={kirim}
+            />
+            <span className="samar">
+              Dipakai toko untuk menghubungi Anda — dan untuk mengenali Anda saat memindai surat
+              jalan berikutnya, supaya akun Anda tidak terbuat dua kali.
+            </span>
+          </label>
+
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="judul-kecil">Plat nomor</span>
+            <input
+              className="medan"
+              value={plat}
+              onChange={(e) => setPlat(e.target.value.toUpperCase())}
+              placeholder="DS 1234 AB"
+              disabled={kirim}
+            />
+          </label>
+
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="judul-kecil">Jenis kendaraan</span>
+            <input
+              className="medan"
+              value={jenis}
+              onChange={(e) => setJenis(e.target.value)}
+              placeholder="Motor, pikap, …"
+              list="kendaraan"
+              disabled={kirim}
+            />
+            <datalist id="kendaraan">
+              {KENDARAAN.map((k) => (
+                <option key={k} value={k} />
+              ))}
+            </datalist>
+          </label>
+        </div>
+
+        <button
+          className="tombol tombol-utama tombol-penuh"
+          disabled={!boleh || kirim || !rit}
+          onClick={() => void daftar()}
+        >
+          {kirim ? <span className="putar" /> : <IkonTruk ukuran={19} />}
+          {kirim ? "Menyiapkan…" : rit?.sudah_jalan ? "Masuk" : `Ambil ${rit?.jumlah ?? ""} antaran`}
+        </button>
+
+        {!boleh && (
+          <div className="samar" style={{ textAlign: "center" }}>
+            Nama dan nomor WhatsApp wajib diisi.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

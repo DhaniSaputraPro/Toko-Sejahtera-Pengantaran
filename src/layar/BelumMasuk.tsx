@@ -14,7 +14,7 @@ import { IkonQr, IkonTruk } from "@/komponen/Ikon";
 export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
   const [tautan, setTautan] = useState("");
 
-  const token = ambilTokenDari(tautan);
+  const tujuan = jalurDari(tautan);
 
   return (
     <div className="layar">
@@ -77,12 +77,12 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           <button
             className="tombol tombol-utama tombol-penuh"
             style={{ marginTop: 10 }}
-            disabled={!token}
-            onClick={() => token && buka(`/masuk/${token}`)}
+            disabled={!tujuan}
+            onClick={() => tujuan && buka(tujuan)}
           >
             Masuk dengan tautan
           </button>
-          {tautan.trim() !== "" && !token && (
+          {tautan.trim() !== "" && !tujuan && (
             <div className="samar" style={{ marginTop: 8, color: "var(--merah)" }}>
               Tautan itu tidak memuat kode undangan yang benar.
             </div>
@@ -94,14 +94,24 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
 }
 
 /**
- * Ambil token dari apa pun yang ditempel: URL penuh, atau tokennya saja.
+ * Ubah apa pun yang ditempel jadi jalur yang benar.
  *
- * Sengaja tidak memakai `new URL()` sebagai satu-satunya jalan — yang tertempel
- * sering sudah terpotong ("…/masuk/ab12…") atau justru cuma tokennya, dan
- * keduanya masih bisa dipakai.
+ * Ada DUA bentuk tautan yang sah, dan keduanya berujung di layar yang berbeda:
+ * `/masuk/<token>` untuk undangan dari halaman Kurir, `/rit/<token>` untuk QR
+ * pada surat jalan cetak. Menebak salah satu berarti mitra dibawa ke layar yang
+ * menolak tokennya dengan alasan yang tidak masuk akal baginya.
+ *
+ * Kalau yang ditempel cuma tokennya saja — tanpa jalur — tidak ada cara
+ * membedakannya, dan `/masuk/` dipilih karena itulah bentuk yang dibagikan
+ * lewat tombol "Salin tautan" di halaman Kurir.
+ *
+ * Sengaja tidak memakai `new URL()` sebagai satu-satunya jalan: yang tertempel
+ * sering sudah terpotong, dan potongannya masih bisa dipakai.
  */
-function ambilTokenDari(teks: string): string | null {
+function jalurDari(teks: string): string | null {
   const bersih = teks.trim();
   const cocok = bersih.match(/[0-9a-f]{64}/i);
-  return cocok ? cocok[0].toLowerCase() : null;
+  if (!cocok) return null;
+  const token = cocok[0].toLowerCase();
+  return /\/rit\//i.test(bersih) ? `/rit/${token}` : `/masuk/${token}`;
 }
