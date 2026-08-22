@@ -72,6 +72,26 @@ Itulah alamat yang ditulis admin ke dalam QR. Halaman Manajemen Kurir selalu
 menampilkan alamat tujuan di bawah QR-nya, jadi salah domain bisa dilihat
 langsung — bukan ditemukan seminggu kemudian.
 
+### Cabang produksi: `main`
+
+Vercel membangun ulang **hanya saat ada push**, dan hanya dari cabang yang
+tercantum di Settings → Environments → Production → Branch Tracking. Cabang itu
+`main`.
+
+Dua hal yang tidak memicu build, dan keduanya pernah menyesatkan:
+
+- **Mengganti nama cabang.** GitHub tidak mengirim event push untuk itu, jadi
+  cabang yang barusan dinamai `main` tetap tidak dibangun sampai ada push
+  berikutnya.
+- **Tombol Redeploy** pada sebuah deployment. Yang dibangunnya commit milik
+  deployment ITU, bukan commit terbaru — kalau baris teratas masih commit lama,
+  hasilnya kode lama lagi.
+
+Cara memastikan yang tayang memang build terbaru tanpa membuka dasbor: buka
+aplikasinya, tombol biru **Pindai QR** harus ada di atas kartu "Cara masuk".
+Aplikasi ini tidak memasang service worker, jadi muat ulang biasa sudah cukup —
+tidak ada cache yang perlu dibersihkan lebih dulu.
+
 ## Keputusan yang perlu diketahui sebelum menyunting
 
 ### Tidak ada `@supabase/supabase-js`
