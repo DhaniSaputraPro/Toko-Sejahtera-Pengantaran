@@ -98,7 +98,15 @@ export interface IntipRit {
   kode: string;
   upah: number;
   jumlah: number;
-  /** true bila rit ini sudah berjalan — berarti ini pemindaian ulang. */
+  /**
+   * Sudah ada kurir yang mengambilnya.
+   *
+   * Pertanyaan PERTAMA orang yang memindai sebaran, karena satu tautan yang
+   * sama dibaca banyak orang dan hanya satu yang menang. Tanpa ini layar
+   * pendaftaran menyapa orang asing dengan "rit ini sudah Anda pegang".
+   */
+  sudah_diambil: boolean;
+  /** Sudah berjalan. Bagi pemegangnya, ini berarti pemindaian ulang. */
   sudah_jalan: boolean;
 }
 

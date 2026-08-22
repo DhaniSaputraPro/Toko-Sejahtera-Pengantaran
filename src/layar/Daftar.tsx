@@ -48,6 +48,11 @@ export function LayarDaftar({
     })();
   }, [token]);
 
+  // Sudah diambil orang lain — atau oleh Anda sendiri, dan itu tidak bisa
+  // dibedakan sebelum nomornya diketik. Layarnya menganggap yang lebih mungkin
+  // (orang lain yang menang) dan menyediakan jalan kedua bagi pemegangnya.
+  const diambil = rit?.sudah_diambil === true;
+
   // Cerminan syarat di `rit_klaim`. Ada di sini supaya tombolnya tidak
   // mengundang ditekan untuk kemudian ditolak; yang menegakkan tetap server.
   const angkaWa = wa.replace(/\D/g, "");
@@ -117,12 +122,12 @@ export function LayarDaftar({
             <IkonTruk ukuran={29} />
           </span>
           <div style={{ fontSize: 21, fontWeight: 700 }}>
-            {rit?.sudah_jalan ? "Masuk kembali" : "Ambil antaran ini"}
+            {diambil ? "Sudah diambil" : "Ambil antaran ini"}
           </div>
           <div className="lembut" style={{ marginTop: 4 }}>
-            {rit?.sudah_jalan
-              ? "Rit ini sudah Anda pegang. Isi nomor WhatsApp yang sama untuk masuk lagi."
-              : "Isi data Anda, lalu daftar antaran langsung terbuka di HP ini."}
+            {diambil
+              ? "Antaran ini sudah lebih dulu diambil kurir lain."
+              : "Siapa lebih dulu mengisi, dia yang dapat. Isi data Anda, lalu daftar antaran langsung terbuka di HP ini."}
           </div>
         </div>
 
@@ -137,7 +142,7 @@ export function LayarDaftar({
             </span>
             <span style={{ textAlign: "right" }}>
               <span className="samar" style={{ display: "block" }}>
-                Upah
+                {diambil ? "Upah (sudah diambil)" : "Upah"}
               </span>
               <span
                 className="angka"
@@ -150,6 +155,28 @@ export function LayarDaftar({
         )}
 
         {galat && <div className="pesan-galat">{galat}</div>}
+
+        {/* Yang kalah adalah keadaan yang WAJAR di sini, bukan kesalahan: satu
+            sebaran dibaca banyak orang dan hanya satu yang menang. Jadi
+            layarnya menerangkan, bukan menyalahkan — lalu tetap menyediakan
+            jalan bagi pemegangnya yang HP-nya bermasalah. */}
+        {diambil && (
+          <div
+            className="kartu"
+            style={{ background: "var(--kuning-lembut)", borderColor: "transparent" }}
+          >
+            <div style={{ fontWeight: 700, marginBottom: 4, color: "var(--kuning)" }}>
+              Kurir lain lebih cepat
+            </div>
+            <div className="lembut" style={{ color: "var(--kuning)" }}>
+              Tidak apa-apa — tunggu sebaran berikutnya dari toko.
+              <br />
+              <br />
+              <strong style={{ fontWeight: 600 }}>Kalau antaran ini milik Anda</strong> dan HP Anda
+              bermasalah, isi nomor WhatsApp yang <em>sama</em> di bawah untuk masuk lagi.
+            </div>
+          </div>
+        )}
 
         <div className="kartu" style={{ display: "grid", gap: 14 }}>
           <label style={{ display: "grid", gap: 6 }}>
@@ -220,7 +247,11 @@ export function LayarDaftar({
           onClick={() => void daftar()}
         >
           {kirim ? <span className="putar" /> : <IkonTruk ukuran={19} />}
-          {kirim ? "Menyiapkan…" : rit?.sudah_jalan ? "Masuk" : `Ambil ${rit?.jumlah ?? ""} antaran`}
+          {kirim
+            ? "Menyiapkan…"
+            : diambil
+              ? "Masuk sebagai pemegangnya"
+              : `Ambil ${rit?.jumlah ?? ""} antaran`}
         </button>
 
         {!boleh && (
