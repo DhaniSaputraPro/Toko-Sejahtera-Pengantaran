@@ -109,8 +109,7 @@ export function LayarDaftar({
             </div>
           </div>
           <div className="samar" style={{ maxWidth: 330 }}>
-            Kode pada lembar berlaku sehari, dan hangus begitu toko mencetak
-            lembar baru untuk rit yang sama.
+            Kode berlaku sehari. Minta lembar baru ke toko.
           </div>
         </div>
       </div>
@@ -140,8 +139,8 @@ export function LayarDaftar({
           </div>
           <div className="lembut" style={{ marginTop: 4 }}>
             {diambil
-              ? "Antaran ini sudah lebih dulu diambil kurir lain."
-              : "Siapa lebih dulu mengisi, dia yang dapat. Isi data Anda, lalu daftar antaran langsung terbuka di HP ini."}
+              ? "Sudah lebih dulu diambil kurir lain."
+              : "Siapa lebih dulu mengisi, dia yang dapat."}
           </div>
         </div>
 
@@ -200,14 +199,8 @@ export function LayarDaftar({
               Kurir lain lebih cepat
             </div>
             <div className="lembut" style={{ color: "var(--kuning)" }}>
-              Tidak apa-apa — tunggu sebaran berikutnya dari toko.
-              <br />
-              <br />
-              <strong style={{ fontWeight: 600 }}>
-                Kalau antaran ini milik Anda
-              </strong>{" "}
-              dan HP Anda bermasalah, isi nomor WhatsApp yang <em>sama</em> di
-              bawah untuk masuk lagi.
+              Tunggu sebaran berikutnya. Kalau ini memang milik Anda, isi nomor WhatsApp yang{" "}
+              <em>sama</em> untuk masuk lagi.
             </div>
           </div>
         )}
@@ -240,11 +233,7 @@ export function LayarDaftar({
               autoComplete="tel"
               disabled={kirim}
             />
-            <span className="samar">
-              Dipakai toko untuk menghubungi Anda — dan untuk mengenali Anda
-              saat memindai surat jalan berikutnya, supaya akun Anda tidak
-              terbuat dua kali.
-            </span>
+            <span className="samar">Dipakai toko untuk menghubungi dan mengenali Anda.</span>
           </label>
 
           <label style={{ display: "grid", gap: 6 }}>
@@ -291,7 +280,7 @@ export function LayarDaftar({
 
         {!boleh && (
           <div className="samar" style={{ textAlign: "center" }}>
-            Nama dan nomor WhatsApp wajib diisi.
+            Nama dan nomor WhatsApp wajib.
           </div>
         )}
       </div>

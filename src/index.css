@@ -498,3 +498,20 @@ a {
   border-color: rgba(255, 255, 255, 0.3);
   border-top-color: #fff;
 }
+
+/* Nomor urut pada kartu antaran. Daftarnya sudah tersusun dari yang terdekat;
+   angka ini yang membuat urutannya terbaca sebagai rute, bukan sebagai tumpukan
+   kartu yang kebetulan berurutan. */
+.urutan {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border-radius: 9px;
+  background: var(--biru-lembut);
+  color: var(--biru);
+  font-size: 13px;
+  font-weight: 700;
+}

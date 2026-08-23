@@ -98,10 +98,10 @@ export function LembarTugas({
         {/* Kepala */}
         <div className="baris" style={{ gap: 8, marginBottom: 12 }}>
           <span className={`lencana ${dibawa ? "lencana-ungu" : "lencana-kuning"}`}>
-            {dibawa ? `Diantar sejak ${jam(tugas.dijemput_pada)}` : "Perlu dijemput di toko"}
+            {dibawa ? `Dibawa sejak ${jam(tugas.dijemput_pada)}` : "Di toko"}
           </span>
           {jarak != null && (
-            <span className="lencana lencana-biru angka">{tampilJarak(jarak)} dari Anda</span>
+            <span className="lencana lencana-biru angka">{tampilJarak(jarak)}</span>
           )}
           <span style={{ flex: 1 }} />
           <button
@@ -125,9 +125,7 @@ export function LembarTugas({
           <div style={{ fontSize: 19, fontWeight: 700 }}>{tugas.nama_penerima}</div>
           <div style={{ marginTop: 6, lineHeight: 1.5 }}>
             {tugas.alamat || (
-              <span style={{ color: "var(--merah)" }}>
-                Pembeli tidak menulis alamat. Hubungi dulu sebelum berangkat.
-              </span>
+              <span style={{ color: "var(--merah)" }}>Alamat tidak ditulis — hubungi dulu.</span>
             )}
           </div>
           {tugas.patokan && (
@@ -154,14 +152,14 @@ export function LembarTugas({
             </a>
           )}
 
-          <div className="baris" style={{ gap: 8, marginTop: 12 }}>
+          <div className="baris" style={{ gap: 8, marginTop: 12, flexWrap: "nowrap" }}>
             {nav && (
               <a
                 className="tombol tombol-utama"
                 href={nav}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ flex: "1 1 160px" }}
+                style={{ flex: "1 1 120px", minWidth: 0 }}
               >
                 <IkonNavigasi ukuran={18} /> Navigasi
               </a>
@@ -176,14 +174,14 @@ export function LembarTugas({
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ flex: "1 1 120px" }}
+                  style={{ flex: "1 1 96px", minWidth: 0 }}
                 >
                   <IkonChat ukuran={18} /> WhatsApp
                 </a>
                 <a
                   className="tombol"
                   href={tautanTelepon(tugas.telepon)}
-                  style={{ flex: "0 0 auto", minWidth: 52, padding: 0 }}
+                  style={{ flex: "0 0 auto", width: 48, minWidth: 48, padding: 0 }}
                   aria-label={`Telepon ${tampilTelepon(tugas.telepon)}`}
                 >
                   <IkonTelepon ukuran={18} />
@@ -193,46 +191,41 @@ export function LembarTugas({
           </div>
         </div>
 
-        {/* Uang — bagian yang paling menentukan apa yang harus dilakukan
-            kurir saat sampai, jadi ditaruh sebelum daftar barang. */}
-        <div
-          className="kartu"
-          style={{
-            marginBottom: 12,
-            ...(cod
-              ? { background: "var(--hijau-lembut)", borderColor: "rgba(20,128,60,.22)" }
-              : {}),
-          }}
-        >
-          <div className="judul-kecil" style={{ marginBottom: 6 }}>
-            Pembayaran
+        {/* Uang. Yang COD mendapat kartunya sendiri — itu satu-satunya hal di
+            layar ini yang menuntut kurir melakukan sesuatu saat sampai. Yang
+            sudah lunas tidak menuntut apa pun, jadi ia cukup menumpang di kepala
+            daftar barang alih-alih memakai satu kartu penuh untuk mengabarkan
+            bahwa tidak ada yang perlu dikerjakan. */}
+        {cod && (
+          <div
+            className="kartu"
+            style={{
+              marginBottom: 12,
+              background: "var(--hijau-lembut)",
+              borderColor: "rgba(20,128,60,.22)",
+            }}
+          >
+            <div style={{ fontSize: 22, fontWeight: 800 }} className="angka">
+              Tagih {rp(tugas.total)}
+            </div>
+            <div className="samar" style={{ color: "var(--hijau)" }}>
+              Bayar di tempat
+            </div>
           </div>
-          {cod ? (
-            <>
-              <div style={{ fontSize: 21, fontWeight: 800 }} className="angka">
-                Tagih {rp(tugas.total)}
-              </div>
-              <div className="lembut" style={{ color: "var(--hijau)" }}>
-                Bayar di tempat — terima uangnya sebelum barang diserahkan.
-              </div>
-            </>
-          ) : (
-            <>
-              <div style={{ fontWeight: 600 }}>
-                {tugas.status_bayar === "dibayar" ? "Sudah lunas" : "Belum lunas"} ·{" "}
-                {namaBayar(tugas.metode_bayar)}
-              </div>
-              <div className="lembut angka">
-                Nilai pesanan {rp(tugas.total)} — tidak ada yang perlu Anda tagih.
-              </div>
-            </>
-          )}
-        </div>
+        )}
 
         {/* Barang */}
         <div className="kartu" style={{ marginBottom: 12 }}>
-          <div className="judul-kecil" style={{ marginBottom: 8 }}>
-            Isi paket · {tugas.nomor}
+          <div className="baris" style={{ gap: 8, marginBottom: 8 }}>
+            <span className="judul-kecil" style={{ flex: 1 }}>
+              Isi paket · {tugas.nomor}
+            </span>
+            {!cod && (
+              <span className="samar angka">
+                {tugas.status_bayar === "dibayar" ? "Lunas" : namaBayar(tugas.metode_bayar)} ·{" "}
+                {rp(tugas.total)}
+              </span>
+            )}
           </div>
           <div style={{ display: "grid", gap: 6 }}>
             {tugas.barang.map((b, i) => (
@@ -292,9 +285,6 @@ export function LembarTugas({
                 />
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <strong className="angka">Uang {rp(tugas.total)} sudah saya terima</strong>
-                  <span className="samar" style={{ display: "block" }}>
-                    Centang ini menandai pesanannya lunas di sistem toko.
-                  </span>
                 </span>
               </label>
             )}
@@ -305,7 +295,7 @@ export function LembarTugas({
                 style={{ cursor: mengunggah ? "default" : "pointer" }}
               >
                 <IkonKamera ukuran={18} />
-                {mengunggah ? "Mengunggah…" : buktiUrl ? "Ganti foto bukti" : "Foto bukti (boleh dilewati)"}
+                {mengunggah ? "Mengunggah…" : buktiUrl ? "Ganti foto" : "Foto bukti"}
                 <input
                   type="file"
                   accept="image/*"
@@ -339,7 +329,7 @@ export function LembarTugas({
               className="medan"
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
-              placeholder="Catatan, mis. diterima anaknya (boleh kosong)"
+              placeholder="Catatan, mis. diterima anaknya"
             />
 
             <div className="baris" style={{ gap: 8 }}>
@@ -366,7 +356,7 @@ export function LembarTugas({
 
             {cod && !codDiterima && (
               <div className="samar" style={{ color: "var(--kuning)" }}>
-                Uangnya belum dicentang diterima — pesanan tetap tercatat belum lunas.
+                Belum dicentang: pesanan tetap tercatat belum lunas.
               </div>
             )}
           </div>
@@ -375,16 +365,13 @@ export function LembarTugas({
         {mode === "gagal" && (
           <div className="kartu" style={{ display: "grid", gap: 12 }}>
             <div style={{ fontWeight: 700, fontSize: 16 }}>Antaran gagal</div>
-            <div className="lembut">
-              Paket kembali ke toko dan tugas ini lepas dari Anda. Admin akan melihat alasannya dan
-              memutuskan langkah berikutnya.
-            </div>
+            <div className="samar">Paket kembali ke toko.</div>
             <textarea
               className="medan"
               rows={3}
               value={alasan}
               onChange={(e) => setAlasan(e.target.value)}
-              placeholder="Apa yang terjadi? Mis. rumah kosong, alamat tidak ketemu, pembeli menolak"
+              placeholder="Apa yang terjadi? Mis. rumah kosong, alamat tidak ketemu"
             />
             <div className="baris" style={{ gap: 8 }}>
               <button

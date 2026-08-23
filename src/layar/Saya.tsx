@@ -66,47 +66,34 @@ export function LayarSaya({
           </span>
         </div>
 
-        {(profil?.jenis_kendaraan || profil?.plat) && (
-          <div className="baris lembut" style={{ gap: 8, marginTop: 12 }}>
-            <IkonTruk ukuran={17} />
-            {[profil?.jenis_kendaraan, profil?.plat].filter(Boolean).join(" · ")}
-          </div>
-        )}
-
-        <div className="samar" style={{ marginTop: 10 }}>
-          Mengantar untuk {profil?.toko.nama ?? "Toko Sejahtera"}. Data ini dibuat admin toko — bila
-          ada yang keliru, mintalah admin mengubahnya.
+        <div className="baris" style={{ gap: 8, marginTop: 12 }}>
+          {(profil?.jenis_kendaraan || profil?.plat) && (
+            <span className="baris lembut" style={{ gap: 7, flex: 1 }}>
+              <IkonTruk ukuran={17} />
+              {[profil?.jenis_kendaraan, profil?.plat].filter(Boolean).join(" · ")}
+            </span>
+          )}
+          {/* "Sampai", bukan "selesai": pekerjaan kurir habis begitu ia
+              menyerahkan barangnya, dan yang menyatakan selesai adalah pembeli
+              di aplikasinya sendiri — kadang berhari-hari kemudian.
+              Hijau hanya kalau memang ada. Nol berlencana hijau memberi selamat
+              atas sesuatu yang belum terjadi. */}
+          <span className={`lencana angka ${hariIni.length > 0 ? "lencana-hijau" : "lencana-abu"}`}>
+            {hariIni.length} sampai hari ini
+          </span>
         </div>
-      </div>
-
-      <div className="kartu">
-        <div className="judul-kecil" style={{ marginBottom: 6 }}>
-          Hari ini
-        </div>
-        <div style={{ fontSize: 26, fontWeight: 800 }} className="angka">
-          {hariIni.length}
-        </div>
-        <div className="lembut">antaran sampai</div>
       </div>
 
       {/* Surat jalan sampai ke tangan kurir SETELAH ia masuk — dititipkan staf
           gudang, kadang di tengah rute. Tanpa tombol ini ia harus keluar dari
           aplikasi, membuka kamera bawaan, dan kembali lewat peramban ke tempat
-          yang sedang dipegangnya. */}
+          yang sedang dipegangnya. Tombolnya berdiri sendiri tanpa kartu dan
+          tanpa keterangan: yang ditulisnya sudah menyebutkan seluruh isinya. */}
       {kameraAda() && (
-        <div className="kartu">
-          <div className="judul-kecil" style={{ marginBottom: 6 }}>
-            Surat jalan
-          </div>
-          <div className="lembut" style={{ marginBottom: 10 }}>
-            Dapat lembar surat jalan dari toko? Pindai QR di lembarnya untuk mengambil seluruh
-            ritnya sekaligus. Anda akan diminta mengisi nomor WhatsApp yang sama seperti sekarang.
-          </div>
-          <button className="tombol tombol-penuh" onClick={() => setPindai(true)}>
-            <IkonQr ukuran={18} />
-            Pindai surat jalan
-          </button>
-        </div>
+        <button className="tombol tombol-penuh" onClick={() => setPindai(true)}>
+          <IkonQr ukuran={18} />
+          Pindai surat jalan
+        </button>
       )}
 
       <div className="judul-kecil" style={{ padding: "4px 4px 0" }}>
@@ -127,7 +114,7 @@ export function LayarSaya({
           <div style={{ display: "grid", placeItems: "center", marginBottom: 8 }}>
             <IkonPaket ukuran={26} />
           </div>
-          <div className="lembut">Belum ada antaran yang sampai.</div>
+          <div className="lembut">Belum ada yang sampai.</div>
         </div>
       ) : (
         (riwayat ?? []).map((r) => (
@@ -147,23 +134,17 @@ export function LayarSaya({
         ))
       )}
 
-      <div className="kartu" style={{ marginTop: 6 }}>
-        <div className="judul-kecil" style={{ marginBottom: 6 }}>
-          Keluar
-        </div>
-        <div className="lembut" style={{ marginBottom: 10 }}>
-          Aplikasi ini akan melupakan akun Anda di HP ini. Untuk masuk lagi, Anda perlu memindai QR
-          baru dari admin toko.
-        </div>
-        <button
-          className="tombol tombol-bahaya tombol-penuh"
-          onClick={() => (pastikan ? keluar() : setPastikan(true))}
-          onBlur={() => setPastikan(false)}
-        >
-          <IkonKeluar ukuran={18} />
-          {pastikan ? "Ketuk sekali lagi untuk keluar" : "Keluar dari aplikasi"}
-        </button>
-      </div>
+      {/* Dua ketukan, bukan dialog: keluar berarti memindai QR baru dari admin,
+          dan itu terlalu mahal untuk terjadi karena jari yang meleset. */}
+      <button
+        className="tombol tombol-bahaya tombol-penuh"
+        style={{ marginTop: 6 }}
+        onClick={() => (pastikan ? keluar() : setPastikan(true))}
+        onBlur={() => setPastikan(false)}
+      >
+        <IkonKeluar ukuran={18} />
+        {pastikan ? "Ketuk sekali lagi untuk keluar" : "Keluar"}
+      </button>
 
       {pindai && (
         <Pemindai

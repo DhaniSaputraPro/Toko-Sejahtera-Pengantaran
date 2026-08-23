@@ -114,10 +114,7 @@ export function Aplikasi() {
         {terputus && (
           <div className="layar" style={{ minHeight: 0 }}>
             <div className="isi" style={{ paddingBottom: 0 }}>
-              <div className="pesan-galat">
-                Sesi Anda sudah tidak berlaku. Bisa jadi admin mencabut peranti ini, atau akun Anda
-                sedang dinonaktifkan. Minta QR baru dari admin toko.
-              </div>
+              <div className="pesan-galat">Sesi berakhir. Minta QR baru dari admin toko.</div>
             </div>
           </div>
         )}
@@ -212,8 +209,7 @@ function LayarKonfigurasi() {
           </div>
           <div className="lembut" style={{ maxWidth: 340 }}>
             <code>VITE_SUPABASE_URL</code> dan <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> belum
-            diisi. Keduanya harus menunjuk proyek Supabase yang sama dengan aplikasi admin — kalau
-            berbeda, QR dari admin tidak akan pernah dikenali di sini.
+            diisi.
           </div>
         </div>
       </div>
