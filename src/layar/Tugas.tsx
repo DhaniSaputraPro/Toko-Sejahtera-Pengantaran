@@ -334,7 +334,7 @@ function KartuTugas({ baris, buka }: { baris: Baris; buka: () => void }) {
             background: "none",
           }}
         >
-          <IkonTruk ukuran={18} /> {dibawa ? "Selesaikan" : "Rincian"}
+          <IkonTruk ukuran={18} /> {dibawa ? "Sampai tujuan" : "Rincian"}
         </button>
       </div>
     </div>

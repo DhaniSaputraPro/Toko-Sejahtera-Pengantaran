@@ -269,7 +269,7 @@ export function LembarTugas({
                 className="tombol tombol-hijau tombol-penuh"
                 onClick={() => setMode("selesai")}
               >
-                <IkonCentang ukuran={19} /> Barang sudah diterima
+                <IkonCentang ukuran={19} /> Sudah saya antar
               </button>
             )}
             <button className="tombol tombol-bahaya tombol-penuh" onClick={() => setMode("gagal")}>
@@ -280,7 +280,7 @@ export function LembarTugas({
 
         {mode === "selesai" && (
           <div className="kartu" style={{ display: "grid", gap: 12 }}>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>Selesaikan antaran</div>
+            <div style={{ fontWeight: 700, fontSize: 16 }}>Sampai di tujuan</div>
 
             {cod && (
               <label className="baris" style={{ gap: 10, cursor: "pointer", alignItems: "flex-start" }}>
@@ -357,7 +357,7 @@ export function LembarTugas({
                   )
                 }
               >
-                {sibuk ? "Menyimpan…" : "Tandai selesai"}
+                {sibuk ? "Menyimpan…" : "Tandai sampai tujuan"}
               </button>
               <button className="tombol" onClick={() => setMode("lihat")} disabled={sibuk}>
                 Batal

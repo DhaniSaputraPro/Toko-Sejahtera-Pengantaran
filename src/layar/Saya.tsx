@@ -86,7 +86,7 @@ export function LayarSaya({
         <div style={{ fontSize: 26, fontWeight: 800 }} className="angka">
           {hariIni.length}
         </div>
-        <div className="lembut">antaran selesai</div>
+        <div className="lembut">antaran sampai</div>
       </div>
 
       {/* Surat jalan sampai ke tangan kurir SETELAH ia masuk — dititipkan staf
@@ -127,7 +127,7 @@ export function LayarSaya({
           <div style={{ display: "grid", placeItems: "center", marginBottom: 8 }}>
             <IkonPaket ukuran={26} />
           </div>
-          <div className="lembut">Belum ada antaran yang selesai.</div>
+          <div className="lembut">Belum ada antaran yang sampai.</div>
         </div>
       ) : (
         (riwayat ?? []).map((r) => (

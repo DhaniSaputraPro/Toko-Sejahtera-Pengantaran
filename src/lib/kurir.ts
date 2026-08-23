@@ -180,6 +180,15 @@ export const ambilRiwayat = (batas = 30): Promise<Riwayat[]> =>
 export const jemput = (pesananId: string): Promise<unknown> =>
   panggil("kurir_jemput", { p_token: token(), p_pesanan_id: pesananId });
 
+/**
+ * Kurir menyatakan SAMPAI, bukan selesai.
+ *
+ * Tahap terakhir ("Selesai") dinyatakan pembeli di aplikasi online — kurir tahu
+ * ia sudah menyerahkan barangnya, pembeli tahu ia sudah menerimanya, dan yang
+ * kedua tidak boleh dinyatakan oleh orang pertama. Nama RPC-nya tetap
+ * `kurir_selesai` supaya versi aplikasi lama yang masih terpasang di HP mitra
+ * tidak pecah; artinya yang berubah.
+ */
 export const selesaikan = (
   pesananId: string,
   opsi: { catatan?: string; buktiUrl?: string; codDiterima?: boolean } = {},
