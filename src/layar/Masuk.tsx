@@ -65,8 +65,7 @@ export function LayarMasuk({
               </div>
             </div>
             <div className="samar" style={{ maxWidth: 320 }}>
-              QR undangan berlaku 20 menit dan hanya sekali pakai. Minta admin toko menampilkan
-              yang baru, lalu pindai lagi.
+              QR berlaku 20 menit dan sekali pakai. Minta yang baru ke admin.
             </div>
           </>
         ) : (
@@ -85,8 +84,7 @@ export function LayarMasuk({
               <IkonTruk ukuran={30} />
             </div>
             <div>
-              <div style={{ fontSize: 19, fontWeight: 700, marginBottom: 6 }}>Menyiapkan akun…</div>
-              <div className="lembut">Sebentar, sedang mencocokkan undangan dari admin toko.</div>
+              <div style={{ fontSize: 19, fontWeight: 700 }}>Menyiapkan akun…</div>
             </div>
             <div className="putar" />
           </>

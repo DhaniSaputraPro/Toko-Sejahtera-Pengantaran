@@ -2,15 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { SesiTidakBerlaku, ambilTugas, type Tugas } from "@/lib/kurir";
 import { jarakKm, tampilJarak } from "@/lib/jarak";
 import { tautanNavigasi } from "@/lib/peta";
-import { rp, sejak } from "@/lib/format";
+import { rp } from "@/lib/format";
 import { usePosisi, type Titik } from "@/lib/posisi";
-import {
-  IkonMuatUlang,
-  IkonNavigasi,
-  IkonPaket,
-  IkonPin,
-  IkonTruk,
-} from "@/komponen/Ikon";
+import { IkonMuatUlang, IkonNavigasi, IkonPaket, IkonPin } from "@/komponen/Ikon";
 import { LembarTugas } from "./Detail";
 
 /** Satu tugas beserta jaraknya dari posisi kurir sekarang. null = tak diketahui. */
@@ -105,21 +99,21 @@ export function LayarTugas({ keluarSesi }: { keluarSesi: () => void }) {
   return (
     <>
       <div className="isi">
-        {/* Ringkasan hari ini */}
-        <div className="kartu">
-          <div style={{ fontSize: 19, fontWeight: 700 }}>
-            {baris.length === 0
-              ? "Belum ada antaran"
-              : `${baris.length} antaran${belumDijemput > 0 ? `, ${belumDijemput} perlu dijemput` : ""}`}
+        {/* Ringkasan: satu baris, dan cuma dua angka yang benar-benar dipakai
+            kurir sebelum berangkat — berapa antaran, dan berapa uang yang harus
+            pulang bersamanya. */}
+        {baris.length > 0 && (
+          <div className="baris" style={{ padding: "0 4px", gap: 8 }}>
+            <strong style={{ fontSize: 17 }}>{baris.length} antaran</strong>
+            {belumDijemput > 0 && (
+              <span className="lencana lencana-kuning">{belumDijemput} di toko</span>
+            )}
+            <span style={{ flex: 1 }} />
+            {totalTagih > 0 && (
+              <span className="lencana lencana-hijau angka">Tagih {rp(totalTagih)}</span>
+            )}
           </div>
-          <div className="lembut" style={{ marginTop: 3 }}>
-            {baris.length === 0
-              ? "Tugas akan muncul di sini begitu admin toko meneruskan pesanan ke Anda."
-              : totalTagih > 0
-                ? `Uang COD yang harus Anda tagih hari ini: ${rp(totalTagih)}`
-                : "Semua pesanan sudah lunas — tidak ada uang yang perlu ditagih."}
-          </div>
-        </div>
+        )}
 
         <BilahPosisi posisi={posisi} adaTugas={baris.length > 0} />
 
@@ -141,30 +135,33 @@ export function LayarTugas({ keluarSesi }: { keluarSesi: () => void }) {
             <div className="putar" />
           </div>
         ) : (
-          baris.map((b) => (
-            <KartuTugas key={b.t.id} baris={b} buka={() => setDibuka(b.t.id)} />
+          baris.map((b, i) => (
+            <KartuTugas key={b.t.id} urut={i + 1} baris={b} buka={() => setDibuka(b.t.id)} />
           ))
         )}
 
         {daftar !== null && baris.length === 0 && !galat && (
           <div
             className="kartu"
-            style={{ textAlign: "center", padding: "34px 18px", color: "var(--teks-samar)" }}
+            style={{ textAlign: "center", padding: "40px 18px", color: "var(--teks-samar)" }}
           >
             <div style={{ display: "grid", placeItems: "center", marginBottom: 10 }}>
               <IkonPaket ukuran={30} />
             </div>
-            <div className="lembut">Tidak ada paket yang menunggu diantar.</div>
+            <div className="lembut">Belum ada antaran.</div>
           </div>
         )}
 
+        {/* Daftar menyegarkan diri tiap menit dan tiap kali aplikasi dibuka
+            kembali, jadi tombol ini cuma untuk yang tidak sabar — kecil, dan
+            tidak ikut mengambil perhatian dari kartu di atasnya. */}
         <button
-          className="tombol tombol-penuh"
+          className="tombol tombol-kecil"
           onClick={() => void muat()}
           disabled={memuat}
-          style={{ marginTop: 2 }}
+          style={{ alignSelf: "center", background: "none", border: 0, color: "var(--teks-samar)" }}
         >
-          {memuat ? <span className="putar" /> : <IkonMuatUlang ukuran={18} />}
+          {memuat ? <span className="putar" /> : <IkonMuatUlang ukuran={16} />}
           {memuat ? "Memuat…" : "Muat ulang"}
         </button>
       </div>
@@ -207,26 +204,17 @@ function BilahPosisi({
   if (posisi.keadaan === "ada") {
     return (
       <div className="baris samar" style={{ padding: "0 4px", gap: 6 }}>
-        <IkonPin ukuran={14} />
-        Diurutkan dari yang terdekat dengan posisi Anda
-        {posisi.titik && posisi.titik.akurasi > 120 && (
-          <span> · sinyal GPS masih kasar (±{Math.round(posisi.titik.akurasi)} m)</span>
-        )}
+        <IkonPin ukuran={13} />
+        Terdekat di atas
       </div>
     );
   }
 
   if (posisi.keadaan === "ditolak" || posisi.keadaan === "gagal") {
     return (
-      <div className="kartu" style={{ background: "var(--kuning-lembut)", borderColor: "transparent" }}>
-        <div style={{ fontWeight: 600, marginBottom: 4 }}>
-          {posisi.keadaan === "ditolak" ? "Izin lokasi ditolak" : "Lokasi tidak terbaca"}
-        </div>
-        <div className="lembut" style={{ color: "var(--kuning)" }}>
-          Daftar di bawah diurutkan dari yang paling dulu diteruskan, bukan dari yang terdekat.
-          {posisi.keadaan === "ditolak" &&
-            " Untuk mengurutkan dari yang terdekat, izinkan lokasi lewat ikon gembok di sebelah alamat situs."}
-        </div>
+      <div className="baris samar" style={{ padding: "0 4px", gap: 6, color: "var(--kuning)" }}>
+        <IkonPin ukuran={13} />
+        Lokasi mati — urutan mengikuti waktu masuk
       </div>
     );
   }
@@ -234,31 +222,37 @@ function BilahPosisi({
   if (posisi.nyala) {
     return (
       <div className="baris samar" style={{ padding: "0 4px", gap: 8 }}>
-        <span className="putar" style={{ width: 14, height: 14 }} /> Mencari posisi Anda…
+        <span className="putar" style={{ width: 13, height: 13 }} /> Mencari posisi…
       </div>
     );
   }
 
   return (
-    <button className="kartu kartu-ketuk" onClick={posisi.nyalakan} style={{ cursor: "pointer" }}>
-      <div className="baris" style={{ gap: 10 }}>
-        <span style={{ color: "var(--biru)" }}>
-          <IkonPin ukuran={22} />
-        </span>
-        <span style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ display: "block", fontWeight: 600 }}>
-            Urutkan dari yang terdekat
-          </span>
-          <span className="samar">Ketuk untuk mengizinkan aplikasi membaca lokasi Anda.</span>
-        </span>
-      </div>
+    <button
+      className="tombol tombol-penuh"
+      onClick={posisi.nyalakan}
+      style={{ justifyContent: "flex-start", color: "var(--biru)" }}
+    >
+      <IkonPin ukuran={18} /> Urutkan dari yang terdekat
     </button>
   );
 }
 
 /* ------------------------------ kartu tugas ------------------------------ */
 
-function KartuTugas({ baris, buka }: { baris: Baris; buka: () => void }) {
+/**
+ * Satu antaran, dibaca sambil berdiri.
+ *
+ * Empat hal saja, dan urutannya mengikuti pertanyaan kurir: yang mana giliran
+ * ini (nomor urut), ke siapa, ke mana, dan apa yang harus dibawa pulang
+ * (uang COD). Sisanya — isi paket, patokan, nomor telepon — ada di rincian,
+ * dibuka dengan mengetuk kartunya.
+ *
+ * Satu tombol di kaki kartu, bukan dua. "Rincian" dulu berdiri di sana padahal
+ * mengetuk kartunya sendiri sudah membukanya; yang tersisa Navigasi, yang
+ * memang paling sering ditekan dan sering ditekan sambil di atas motor.
+ */
+function KartuTugas({ urut, baris, buka }: { urut: number; baris: Baris; buka: () => void }) {
   const { t, jarak } = baris;
   const nav = tautanNavigasi(t.alamat, t.lat, t.lng);
   const tagih = perluTagih(t);
@@ -266,41 +260,38 @@ function KartuTugas({ baris, buka }: { baris: Baris; buka: () => void }) {
 
   return (
     <div className="kartu" style={{ padding: 0, overflow: "hidden" }}>
-      <button className="kartu-ketuk" onClick={buka} style={{ border: 0, background: "none", padding: 14 }}>
-        <div className="baris" style={{ gap: 7, marginBottom: 7 }}>
-          {jarak != null ? (
-            <span className="lencana lencana-biru angka">
-              <IkonPin ukuran={13} /> {tampilJarak(jarak)}
+      <button
+        className="kartu-ketuk"
+        onClick={buka}
+        style={{ border: 0, background: "none", padding: 13 }}
+      >
+        <div className="baris" style={{ gap: 10, flexWrap: "nowrap", alignItems: "flex-start" }}>
+          <span className="urutan angka">{urut}</span>
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: "block", fontSize: 16.5, fontWeight: 700, lineHeight: 1.25 }}>
+              {t.nama_penerima}
             </span>
-          ) : (
-            <span className="lencana lencana-abu">Jarak tak diketahui</span>
+            <span className="lembut" style={{ display: "block", marginTop: 2, lineHeight: 1.4 }}>
+              {t.alamat || <em style={{ color: "var(--merah)" }}>Alamat tidak ditulis</em>}
+            </span>
+          </span>
+          {jarak != null && (
+            <span className="angka" style={{ fontWeight: 700, color: "var(--biru)" }}>
+              {tampilJarak(jarak)}
+            </span>
           )}
+        </div>
+
+        <div className="baris" style={{ gap: 6, marginTop: 9 }}>
           <span className={`lencana ${dibawa ? "lencana-ungu" : "lencana-kuning"}`}>
-            {dibawa ? "Sedang diantar" : "Perlu dijemput di toko"}
+            {dibawa ? "Dibawa" : "Di toko"}
           </span>
           {tagih > 0 && <span className="lencana lencana-hijau angka">Tagih {rp(tagih)}</span>}
-        </div>
-
-        <div style={{ fontSize: 16.5, fontWeight: 700, lineHeight: 1.25 }}>{t.nama_penerima}</div>
-
-        <div className="lembut" style={{ marginTop: 3, lineHeight: 1.45 }}>
-          {t.alamat || <em style={{ color: "var(--merah)" }}>Alamat tidak ditulis pembeli</em>}
-        </div>
-        {t.patokan && (
-          <div className="samar" style={{ marginTop: 2 }}>
-            Patokan: {t.patokan}
-          </div>
-        )}
-
-        <div className="samar angka" style={{ marginTop: 6 }}>
-          {t.nomor} · {t.barang.length} jenis barang · {rp(t.total)}
-          {t.siap_jemput_pada && ` · ${sejak(t.siap_jemput_pada)}`}
+          <span style={{ flex: 1 }} />
+          <span className="samar angka">{t.nomor}</span>
         </div>
       </button>
 
-      {/* Navigasi dibuat sebagai baris tersendiri selebar kartu, bukan tombol
-          kecil di pojok: inilah yang paling sering ditekan, dan sering ditekan
-          sambil berdiri di atas motor. */}
       <div style={{ display: "flex", borderTop: "1px solid var(--garis)" }}>
         {nav ? (
           <a
@@ -319,23 +310,13 @@ function KartuTugas({ baris, buka }: { baris: Baris; buka: () => void }) {
             <IkonNavigasi ukuran={18} /> Navigasi
           </a>
         ) : (
-          <span className="tombol" style={{ flex: 1, border: 0, borderRadius: 0, color: "var(--teks-samar)" }}>
+          <span
+            className="tombol"
+            style={{ flex: 1, border: 0, borderRadius: 0, color: "var(--teks-samar)" }}
+          >
             Tidak ada alamat
           </span>
         )}
-        <button
-          className="tombol"
-          onClick={buka}
-          style={{
-            flex: 1,
-            border: 0,
-            borderLeft: "1px solid var(--garis)",
-            borderRadius: 0,
-            background: "none",
-          }}
-        >
-          <IkonTruk ukuran={18} /> {dibawa ? "Selesaikan" : "Rincian"}
-        </button>
       </div>
     </div>
   );

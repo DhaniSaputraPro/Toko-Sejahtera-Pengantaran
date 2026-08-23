@@ -105,6 +105,31 @@ jaringan seluler.
 Yang paling tidak terpakai justru bagian auth-nya: kurir **tidak punya akun
 Supabase**. Yang dipegangnya token sesi peranti yang dikirim sebagai argumen RPC.
 
+### Layarnya irit kata, dan itu aturan
+
+Yang membaca layar ini sedang berdiri di tepi jalan, sering di bawah matahari,
+kadang dengan satu tangan memegang paket. Kalimat yang menerangkan sesuatu yang
+sudah jelas dari tombolnya bukan bantuan — ia mendorong kartu berikutnya keluar
+dari layar.
+
+Aturan yang dipakai saat menyunting layar mana pun di sini:
+
+- **Satu kartu, satu pertanyaan.** Ringkasan di puncak daftar antaran cuma dua
+  angka: berapa antaran, dan berapa uang COD yang harus pulang bersama kurir.
+- **Tidak ada dua tombol untuk satu maksud.** Kartu antaran dulu punya tombol
+  "Rincian" padahal mengetuk kartunya sendiri sudah membukanya. Yang tersisa
+  Navigasi.
+- **Keterangan hanya untuk yang tidak bisa ditebak.** "Foto bukti (boleh
+  dilewati)" jadi "Foto bukti"; tombol yang bisa dilewati memang tidak menahan
+  siapa pun. Tapi "Patokan" tetap ditulis penuh — kurir membacanya di depan
+  pagar, dan salah rumah lebih mahal daripada satu baris teks.
+- **Nol tidak dirayakan.** Lencana "selesai hari ini" hijau hanya kalau ada yang
+  selesai; nol berlencana hijau memberi selamat atas sesuatu yang belum terjadi.
+
+Daftar antaran diberi **nomor urut**. Urutannya sudah dihitung dari jarak, dan
+angka itulah yang membuatnya terbaca sebagai rute, bukan sebagai tumpukan kartu
+yang kebetulan berurutan.
+
 ### Pemindai QR ada di dalam aplikasi
 
 Dulu seluruh pemindaian diserahkan ke kamera bawaan HP: QR memuat URL, kameranya
