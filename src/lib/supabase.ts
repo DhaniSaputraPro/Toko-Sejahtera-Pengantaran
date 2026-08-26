@@ -76,6 +76,34 @@ export async function rpc<T>(nama: string, arg: Record<string, unknown>): Promis
   return (teks ? (JSON.parse(teks) as T) : (null as T));
 }
 
+/**
+ * Baca tabel lewat PostgREST.
+ *
+ * Ada karena satu hal yang dibutuhkan aplikasi ini memang cuma bisa dibaca dari
+ * tabel: ikon toko, yang diatur staf di admin. Tetap `anon` seperti `rpc`, dan
+ * yang boleh terbaca ditentukan RLS — tabel yang tidak dibuka untuk publik
+ * menjawab dengan larik kosong, bukan dengan datanya.
+ *
+ * Galatnya dikembalikan sebagai `null`, tidak dilempar: satu-satunya pemakainya
+ * sekarang adalah hal yang boleh gagal tanpa ada yang perlu tahu.
+ */
+export async function baca<T>(jalur: string): Promise<T[] | null> {
+  if (!url || !kunci) return null;
+  try {
+    const jawaban = await fetch(`${url}/rest/v1/${jalur}`, {
+      headers: {
+        apikey: kunci,
+        Authorization: `Bearer ${kunci}`,
+        Accept: "application/json",
+      },
+    });
+    if (!jawaban.ok) return null;
+    return (await jawaban.json()) as T[];
+  } catch {
+    return null;
+  }
+}
+
 /** Kirim FormData ke Edge Function dan kembalikan jawabannya. */
 export async function fungsi<T>(nama: string, form: FormData): Promise<T> {
   const { url, kunci } = siap();
