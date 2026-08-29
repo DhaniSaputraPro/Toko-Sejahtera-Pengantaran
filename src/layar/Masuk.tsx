@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { masuk } from "@/lib/kurir";
 import { simpanSesi, type ProfilKurir } from "@/lib/sesi";
-import { IkonPeringatan, IkonTruk } from "@/komponen/Ikon";
+import { IkonPeringatan } from "@/komponen/Ikon";
+import { LogoToko } from "@/komponen/LogoToko";
 
 /**
  * Layar yang terbuka begitu QR dipindai: `/masuk/<token>`.
@@ -72,19 +73,7 @@ export function LayarMasuk({
           </>
         ) : (
           <>
-            <div
-              style={{
-                display: "grid",
-                placeItems: "center",
-                width: 64,
-                height: 64,
-                borderRadius: 20,
-                background: "var(--biru-lembut)",
-                color: "var(--biru)",
-              }}
-            >
-              <IkonTruk ukuran={30} />
-            </div>
+            <LogoToko ukuran={38} kotak={64} />
             <div>
               <div className="judul">Menyiapkan akun…</div>
             </div>

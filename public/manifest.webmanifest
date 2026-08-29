@@ -1,7 +1,7 @@
 {
-  "name": "Kurir Toko Sejahtera",
-  "short_name": "Kurir TS",
-  "description": "Daftar antar dan navigasi untuk mitra kurir Toko Sejahtera.",
+  "name": "Pengantaran Toko Sejahtera",
+  "short_name": "Pengantaran",
+  "description": "Daftar antar dan navigasi untuk mitra pengantar Toko Sejahtera.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

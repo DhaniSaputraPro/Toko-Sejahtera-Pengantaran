@@ -170,7 +170,7 @@ export function LembarTugas({
                   className="tombol"
                   href={tautanWa(
                     tugas.telepon,
-                    `Halo ${tugas.nama_penerima}, saya kurir Toko Sejahtera yang mengantar pesanan ${tugas.nomor}.`,
+                    `Halo ${tugas.nama_penerima}, saya pengantar Toko Sejahtera yang mengantar pesanan ${tugas.nomor}.`,
                   )}
                   target="_blank"
                   rel="noopener noreferrer"

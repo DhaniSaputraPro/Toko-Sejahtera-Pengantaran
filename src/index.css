@@ -66,8 +66,14 @@
   --cincin: 0 0 0 3.5px rgba(0, 113, 227, 0.28);
 }
 
+/* Token mode gelap ditulis dua kali, dan memang harus.
+   Yang pertama berlaku saat kurir MEMBIARKAN aplikasinya ikut peranti; yang
+   kedua saat ia MEMILIH gelap di tab Saya. CSS tidak punya cara memakai ulang
+   satu blok untuk dua pemicu, dan menyatukannya lewat kelas di `<body>` berarti
+   temanya baru terpasang setelah React hidup — terlihat sebagai kedipan putih
+   di tangan orang yang justru memilih gelap. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-tema="terang"]) {
     --latar: #000000;
     --kartu: #1c1c1e;
     --kartu-tekan: #2c2c2e;
@@ -97,6 +103,55 @@
     --bayang-apung: 0 8px 34px rgba(0, 0, 0, 0.6);
     --cincin: 0 0 0 3.5px rgba(10, 132, 255, 0.4);
   }
+
+  :root:not([data-tema="terang"]) .kartu {
+    border-color: transparent;
+  }
+}
+
+:root[data-tema="gelap"] {
+  --latar: #000000;
+  --kartu: #1c1c1e;
+  --kartu-tekan: #2c2c2e;
+  --selaput: rgba(28, 28, 30, 0.74);
+
+  --teks: #ffffff;
+  --teks-lembut: rgba(235, 235, 245, 0.62);
+  --teks-samar: rgba(235, 235, 245, 0.42);
+
+  --garis: rgba(84, 84, 88, 0.55);
+  --garis-tegas: rgba(84, 84, 88, 0.8);
+
+  --biru: #0a84ff;
+  --biru-lembut: rgba(10, 132, 255, 0.2);
+  --hijau: #32d74b;
+  --hijau-lembut: rgba(48, 209, 88, 0.2);
+  --hijau-isi: #1e7a35;
+  --kuning: #ffb340;
+  --kuning-lembut: rgba(255, 159, 10, 0.22);
+  --ungu: #d08bf5;
+  --ungu-lembut: rgba(191, 90, 242, 0.22);
+  --merah: #ff6961;
+  --merah-lembut: rgba(255, 69, 58, 0.22);
+  --abu-lembut: rgba(235, 235, 245, 0.14);
+
+  --bayang: none;
+  --bayang-apung: 0 8px 34px rgba(0, 0, 0, 0.6);
+  --cincin: 0 0 0 3.5px rgba(10, 132, 255, 0.4);
+}
+
+:root[data-tema="gelap"] .kartu {
+  border-color: transparent;
+}
+
+/* `color-scheme` ikut pilihannya, bukan cuma ikut peranti: itu yang menentukan
+   warna bilah gulir, kotak centang, dan tetikus teks bawaan peramban. */
+:root[data-tema="terang"] {
+  color-scheme: light;
+}
+
+:root[data-tema="gelap"] {
+  color-scheme: dark;
 }
 
 * {
@@ -226,19 +281,6 @@ a {
   padding: 14px;
 }
 
-/* Di atas latar hitam, kartu sudah terpisah oleh warnanya sendiri. Bingkai di
-   sekelilingnya cuma menggambar kotak yang tidak perlu digambar — pemisah DI
-   DALAM kartu tetap memakai garis yang sama.
-
-   Ditaruh SESUDAH `.kartu`, bukan di dalam blok token di puncak berkas: dua
-   aturan dengan kekhususan sama diputuskan oleh urutan, dan yang di puncak
-   pasti kalah. */
-@media (prefers-color-scheme: dark) {
-  .kartu {
-    border-color: transparent;
-  }
-}
-
 .kartu-ketuk {
   width: 100%;
   text-align: left;
@@ -361,6 +403,43 @@ a {
   border-color: transparent;
   box-shadow: none;
   color: var(--biru);
+}
+
+/* ------------------------------- segmen ---------------------------------- */
+
+/* Kendali bersegmen macOS: satu alur, pilihan yang aktif naik jadi bidang putih
+   berbayang tipis. Bukan tiga tombol berjajar — tiga tombol tidak mengatakan
+   bahwa memilih satu membatalkan yang lain. */
+.segmen {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 11px;
+  background: var(--abu-lembut);
+}
+
+.segmen-butir {
+  appearance: none;
+  border: 0;
+  background: none;
+  border-radius: 9px;
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 590;
+  color: var(--teks-lembut);
+  cursor: pointer;
+  transition:
+    background-color 0.14s ease,
+    color 0.14s ease;
+}
+
+.segmen-butir[aria-pressed="true"] {
+  background: var(--kartu);
+  color: var(--teks);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.09);
 }
 
 /* -------------------------------- medan --------------------------------- */

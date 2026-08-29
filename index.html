@@ -8,22 +8,25 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5"
     />
-    <!-- Warna bilah peramban ikut mode peranti, sama seperti tema di dalamnya. -->
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+    <!-- Satu theme-color saja; isinya ditulis ulang `src/lib/tema.ts` sesuai
+         tema yang benar-benar tampil, termasuk saat kurir memilih sendiri. -->
+    <meta name="theme-color" content="#f5f5f7" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="description" content="Aplikasi kurir Toko Sejahtera — daftar antar dan navigasi." />
+    <meta
+      name="description"
+      content="Aplikasi pengantaran Toko Sejahtera — daftar antar dan navigasi."
+    />
     <!-- Daftar antar memuat alamat rumah pembeli. Tidak ada satu pun bagian
          aplikasi ini yang boleh muncul di hasil pencarian. -->
     <meta name="robots" content="noindex, nofollow" />
     <meta name="referrer" content="same-origin" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Kurir TS" />
+    <meta name="apple-mobile-web-app-title" content="Pengantaran" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="/ikon.svg" />
     <link rel="apple-touch-icon" href="/ikon-180.png" />
-    <title>Kurir Toko Sejahtera</title>
+    <title>Pengantaran Toko Sejahtera</title>
   </head>
   <body>
     <div id="akar"></div>

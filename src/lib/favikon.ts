@@ -49,20 +49,39 @@ interface BarisIdentitas {
 }
 
 /**
- * Baca ikon aplikasi ini lalu pasang.
+ * Alamat ikon toko — untuk tab, dan untuk LOGO di dalam aplikasi.
  *
- * Tidak pernah melempar dan tidak pernah menahan apa pun: kurir yang membuka
- * daftar antar di tepi jalan tidak boleh menunggu satu ikon, dan tab yang
- * memakai ikon dari `index.html` bukan galat yang perlu dilihat siapa pun.
+ * Dijanjikan sekali lalu dibagikan: layar masuk, bilah atas, dan pemasang ikon
+ * tab menanyakan hal yang sama, dan tiga permintaan untuk satu jawaban adalah
+ * tiga permintaan di jaringan seluler yang sedang dipakai memuat daftar antar.
+ *
+ * Tidak pernah melempar. Ikon yang gagal dibaca bukan galat yang perlu dilihat
+ * siapa pun — yang tampil tinggal ikon bawaan.
  */
+let janji: Promise<string | null> | null = null;
+
+export function ikonToko(): Promise<string | null> {
+  janji ??= (async () => {
+    try {
+      const baris = await baca<BarisIdentitas>("pengaturan_toko?id=eq.1&select=identitas&limit=1");
+      const i = baris?.[0]?.identitas;
+      if (!i) return null;
+      // Ikon khusus aplikasi ini lebih dulu; `favicon_url` cadangan bersama
+      // untuk aplikasi yang belum diberi ikonnya sendiri.
+      return (
+        [i[KUNCI], i.favicon_url].find(
+          (x): x is string => typeof x === "string" && x.trim() !== "",
+        ) ?? null
+      );
+    } catch {
+      return null;
+    }
+  })();
+  return janji;
+}
+
+/** Baca ikon aplikasi ini lalu pasang sebagai ikon tab. */
 export async function terapkanFavikon(): Promise<void> {
-  const baris = await baca<BarisIdentitas>("pengaturan_toko?id=eq.1&select=identitas&limit=1");
-  const i = baris?.[0]?.identitas;
-  if (!i) return;
-  // Ikon khusus aplikasi ini lebih dulu; `favicon_url` cadangan bersama untuk
-  // aplikasi yang belum diberi ikonnya sendiri.
-  const url = [i[KUNCI], i.favicon_url].find(
-    (x): x is string => typeof x === "string" && x.trim() !== "",
-  );
+  const url = await ikonToko();
   if (url) pasang(url);
 }

@@ -1,49 +1,30 @@
 import { useState } from "react";
 import { Pemindai } from "@/komponen/Pemindai";
+import { PilihTema } from "@/komponen/PilihTema";
+import { LogoToko } from "@/komponen/LogoToko";
 import { jalurDari, kameraAda } from "@/lib/pindai";
-import { IkonQr, IkonTruk } from "@/komponen/Ikon";
+import { IkonQr } from "@/komponen/Ikon";
 
 /**
  * Layar sebelum ada sesi apa pun.
  *
- * Satu tombol, dan satu kalimat yang menerangkannya. Layar ini dulu memuat
- * daftar tiga langkah "cara masuk" — tetapi yang membacanya sudah berdiri di
- * depan admin yang sedang menampilkan QR-nya, dan tidak ada satu pun dari tiga
- * langkah itu yang belum ia jalani.
- *
- * Tempel-tautan tetap ada, dilipat: jalan cadangan untuk peranti yang kameranya
- * tidak bisa dipakai peramban.
+ * Satu tombol besar, satu kolom tautan, satu pengatur tema. Tidak ada kalimat
+ * yang menerangkan tombol yang sudah menyebut dirinya sendiri: yang membaca
+ * layar ini sedang berdiri di depan admin yang menampilkan QR-nya.
  */
 export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
   const [tautan, setTautan] = useState("");
   const [pindai, setPindai] = useState(false);
-  const [pakaiTautan, setPakaiTautan] = useState(false);
 
   const tujuan = jalurDari(tautan);
   const bisaPindai = kameraAda();
 
   return (
     <div className="layar">
-      <div className="isi" style={{ justifyContent: "center", gap: 18 }}>
-        <div style={{ textAlign: "center" }}>
-          <div
-            style={{
-              display: "inline-grid",
-              placeItems: "center",
-              width: 64,
-              height: 64,
-              borderRadius: 20,
-              background: "var(--biru-lembut)",
-              color: "var(--biru)",
-              marginBottom: 14,
-            }}
-          >
-            <IkonTruk ukuran={30} />
-          </div>
-          <div className="judul-besar">Kurir Toko Sejahtera</div>
-          <div className="lembut" style={{ marginTop: 6 }}>
-            Pindai QR dari admin toko atau dari surat jalan.
-          </div>
+      <div className="isi" style={{ justifyContent: "center", gap: 16 }}>
+        <div style={{ display: "grid", justifyItems: "center", gap: 12 }}>
+          <LogoToko ukuran={38} kotak={64} />
+          <div className="judul-besar">Pengantaran Toko Sejahtera</div>
         </div>
 
         {bisaPindai && (
@@ -53,53 +34,42 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           </button>
         )}
 
-        {/* Jalan cadangan, dan memang cadangan: dilipat sampai diminta.
-            Sebagian kamera bawaan membuka hasil pindaian di peramban
-            dalam-aplikasi yang penyimpanannya dibuang saat ditutup, dan dari
-            sanalah tautan itu ditempel ke sini. Jarang dipakai, tapi tanpa itu
-            kurirnya tidak punya jalan lain sama sekali. */}
-        {!pakaiTautan ? (
+        {/* Terbuka apa adanya, tidak dilipat. Yang datang lewat jalan ini
+            biasanya sudah memegang tautannya di papan tempel — menyembunyikan
+            kolomnya di balik satu ketukan lagi cuma menambah satu ketukan. */}
+        <div className="kartu">
+          <input
+            className="medan"
+            value={tautan}
+            onChange={(e) => setTautan(e.target.value)}
+            placeholder="Tempel tautan undangan"
+            inputMode="url"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+          />
           <button
-            className="tombol tombol-kecil tombol-polos"
-            onClick={() => setPakaiTautan(true)}
-            style={{ alignSelf: "center" }}
+            className="tombol tombol-penuh"
+            style={{ marginTop: 10 }}
+            disabled={!tujuan}
+            onClick={() => tujuan && buka(tujuan)}
           >
-            {bisaPindai ? "Punya tautan undangan?" : "Masuk dengan tautan undangan"}
+            Masuk dengan tautan
           </button>
-        ) : (
-          <div className="kartu">
-            <input
-              className="medan"
-              value={tautan}
-              onChange={(e) => setTautan(e.target.value)}
-              placeholder="Tempel tautan dari admin"
-              inputMode="url"
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              autoFocus
-            />
-            <button
-              className="tombol tombol-penuh"
-              style={{ marginTop: 10 }}
-              disabled={!tujuan}
-              onClick={() => tujuan && buka(tujuan)}
-            >
-              Masuk
-            </button>
-            {tautan.trim() !== "" && !tujuan && (
-              <div className="samar" style={{ marginTop: 8, color: "var(--merah)" }}>
-                Tautan itu tidak memuat kode undangan.
-              </div>
-            )}
-          </div>
-        )}
+          {tautan.trim() !== "" && !tujuan && (
+            <div className="samar" style={{ marginTop: 8, color: "var(--merah)" }}>
+              Tautan itu tidak memuat kode undangan.
+            </div>
+          )}
+        </div>
+
+        <PilihTema />
       </div>
 
       {pindai && (
         <Pemindai
           judul="Pindai QR"
-          petunjuk="Arahkan ke QR di layar admin atau di surat jalan."
+          petunjuk="Arahkan ke QR di layar admin atau di lembar rit."
           tutup={() => setPindai(false)}
           terima={(teks) => {
             const jalur = jalurDari(teks);

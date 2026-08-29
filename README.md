@@ -1,6 +1,6 @@
-# Kurir Toko Sejahtera
+# Pengantaran Toko Sejahtera
 
-Aplikasi yang dipegang mitra kurir saat mengantar pesanan tokosejahtera.id.
+Aplikasi yang dipegang mitra pengantar saat mengantar pesanan tokosejahtera.id.
 Dibuka dari HP, dipakai sambil berdiri di tepi jalan.
 
 Pasangannya `Toko-Sejahtera-Platform` — aplikasi admin. Keduanya memakai basis
@@ -14,7 +14,7 @@ ada di `docs/KURIR-DAN-PENGANTARAN.md` pada repo Platform.
 
 | | `/masuk/<token>` | `/rit/<token>` |
 | --- | --- | --- |
-| Dipindai dari | Layar admin | Lembar **surat jalan** yang dicetak |
+| Dipindai dari | Layar admin | Lembar **rit** yang dicetak |
 | Data mitra diketik oleh | Admin, sebelumnya | Mitra sendiri, di layar ini |
 | Umur token | 20 menit | 1 hari |
 | Yang didapat | Sesi peranti saja | Sesi **dan** seluruh rit sekaligus |
@@ -24,14 +24,14 @@ yang datanya sudah dikenal toko, yang kedua meminta mitra memperkenalkan diri
 lalu menyerahkan seluruh perjalanan kepadanya. Satu alamat untuk dua maksud akan
 memaksa `App.tsx` menebak yang mana yang dimaksud.
 
-Pada jalur kedua, mitra dicocokkan lewat **nomor WhatsApp** — memindai surat
-jalan kesepuluh tidak melahirkan akun kesepuluh.
+Pada jalur kedua, mitra dicocokkan lewat **nomor WhatsApp** — memindai lembar
+rit kesepuluh tidak melahirkan akun kesepuluh.
 
-## Yang bisa dilakukan kurir
+## Yang bisa dilakukan pengantar
 
-- Masuk dengan **memindai QR** dari layar admin, atau dari surat jalan cetak —
+- Masuk dengan **memindai QR** dari layar admin, atau dari lembar rit cetak —
   pemindainya ada **di dalam aplikasi**, tidak perlu keluar ke kamera bawaan.
-- Mengambil **rit baru** di tengah rute dengan memindai surat jalan dari tab Saya.
+- Mengambil **rit baru** di tengah rute dengan memindai lembarnya dari tab Saya.
 - Melihat daftar antaran, **terurut dari yang paling dekat dengan posisinya**.
 - Menekan **Navigasi** untuk membuka arahan belok-per-belok di Google Maps.
 - Menandai **sudah dijemput** di toko, dan **selesai** di tujuan.
@@ -88,9 +88,9 @@ Dua hal yang tidak memicu build, dan keduanya pernah menyesatkan:
   hasilnya kode lama lagi.
 
 Cara memastikan yang tayang memang build terbaru tanpa membuka dasbor: buka
-aplikasinya, tombol biru **Pindai QR** harus ada di atas kartu "Cara masuk".
-Aplikasi ini tidak memasang service worker, jadi muat ulang biasa sudah cukup —
-tidak ada cache yang perlu dibersihkan lebih dulu.
+aplikasinya, judulnya harus berbunyi **Pengantaran Toko Sejahtera** dengan ikon
+toko di atasnya. Aplikasi ini tidak memasang service worker, jadi muat ulang
+biasa sudah cukup — tidak ada cache yang perlu dibersihkan lebih dulu.
 
 ## Keputusan yang perlu diketahui sebelum menyunting
 
@@ -104,6 +104,40 @@ jaringan seluler.
 
 Yang paling tidak terpakai justru bagian auth-nya: kurir **tidak punya akun
 Supabase**. Yang dipegangnya token sesi peranti yang dikirim sebagai argumen RPC.
+
+### Logo mengikuti ikon toko
+
+Logo di bilah atas dan di layar masuk adalah **ikon toko yang sama dengan ikon
+tab peramban** — kolom `favicon_pengantaran_url` pada `pengaturan_toko.identitas`,
+yang diisi staf di halaman Identitas pada admin. Satu tempat menentukan
+keduanya; tidak ada logo terpisah yang harus diingat untuk diganti.
+
+Alamatnya dibaca sekali lalu dibagikan (`ikonToko()` di `src/lib/favikon.ts`):
+pemasang ikon tab, bilah atas, dan layar masuk menanyakan hal yang sama, dan
+tiga permintaan untuk satu jawaban adalah tiga permintaan di jaringan seluler
+yang sedang dipakai memuat daftar antar.
+
+Truk bawaan tetap ada sebagai jaring — tampil selama ikonnya belum sampai, saat
+kolomnya kosong, dan saat berkasnya gagal dimuat.
+
+### Terang, gelap, atau ikut HP
+
+`src/lib/tema.ts` menulis satu atribut di `<html>`; sisanya urusan CSS. Pilihan
+`sistem` MENGHAPUS atributnya, bukan mengisinya — dengan begitu
+`prefers-color-scheme` kembali memegang kendali tanpa aturan tambahan.
+
+Dipasang di `main.tsx` **sebelum React menggambar apa pun**. Tema yang dipasang
+setelah layar tergambar terlihat sebagai kedipan putih di tangan orang yang
+justru memilih gelap.
+
+Token gelapnya ditulis dua kali di CSS — sekali di dalam
+`@media (prefers-color-scheme: dark)` untuk yang membiarkan aplikasinya ikut
+peranti, sekali di `:root[data-tema="gelap"]` untuk yang memilih sendiri. CSS
+tidak punya cara memakai ulang satu blok untuk dua pemicu.
+
+`<meta name="theme-color">` ditulis ulang dari JavaScript, bukan dua meta
+bermedia: tanpa itu, kurir yang memilih gelap sementara HP-nya terang mendapat
+bilah peramban putih di atas aplikasi hitam.
 
 ### Temanya mengikuti macOS/iOS
 
@@ -129,9 +163,8 @@ di bawah sinar langsung:
   `--hijau-isi`). Tulisan putih di atas hijau terang iOS cuma 1,9:1; tombol
   "Sudah saya jemput" akan hilang di tangan kurir yang berdiri di terik.
 
-Mode gelap ikut karena kurir juga bekerja setelah magrib. `index.html` menyetel
-`color-scheme: light dark` dan dua `theme-color`, jadi bilah peramban pun ikut
-berubah.
+Mode gelap ikut karena pengantar juga bekerja setelah magrib — dan bisa dipilih
+sendiri; lihat bagian di atas.
 
 ### Layarnya irit kata, dan itu aturan
 
@@ -169,11 +202,11 @@ memakai aplikasi ini:
    penyimpanan peramban itu, terpisah dari aplikasinya.
 2. Sebagian kamera bawaan membuka hasil pindaian di **peramban dalam-aplikasi**
    (Lens, WhatsApp) yang penyimpanannya dibuang begitu ditutup.
-3. **Surat jalan** sampai ke tangan kurir setelah ia masuk, kadang di tengah
+3. **Lembar rit** sampai ke tangan pengantar setelah ia masuk, kadang di tengah
    rute. Menyuruhnya keluar ke aplikasi kamera untuk kembali ke tempat yang
    sedang dipegangnya adalah jalan memutar tanpa alasan.
 
-Tombol **Pindai QR** ada di layar masuk, dan **Pindai surat jalan** di tab Saya.
+Tombol **Pindai QR** ada di layar masuk, dan **Pindai rit** di tab Saya.
 Keduanya memakai `src/komponen/Pemindai.tsx`; yang menilai isi QR-nya bukan
 pemindai melainkan layar pemanggilnya, lewat `terima` — QR asing tidak menutup
 kamera, cuma dijawab satu kalimat sambil pemindaian terus berjalan.

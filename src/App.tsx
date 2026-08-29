@@ -7,7 +7,8 @@ import { LayarDaftar } from "@/layar/Daftar";
 import { LayarBelumMasuk } from "@/layar/BelumMasuk";
 import { LayarTugas } from "@/layar/Tugas";
 import { LayarSaya } from "@/layar/Saya";
-import { IkonOrang, IkonPaket, IkonPeringatan, IkonTruk } from "@/komponen/Ikon";
+import { IkonOrang, IkonPaket, IkonPeringatan } from "@/komponen/Ikon";
+import { LogoToko } from "@/komponen/LogoToko";
 
 /**
  * Perutean seadanya, dan memang cukup segini.
@@ -126,19 +127,7 @@ export function Aplikasi() {
   return (
     <div className="layar">
       <header className="bilah-atas">
-        <span
-          style={{
-            display: "grid",
-            placeItems: "center",
-            width: 34,
-            height: 34,
-            borderRadius: 980,
-            background: "var(--biru)",
-            color: "#fff",
-          }}
-        >
-          <IkonTruk ukuran={19} />
-        </span>
+        <LogoToko ukuran={20} kotak={34} />
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: "block", fontWeight: 620, lineHeight: 1.25 }}>
             {profil?.nama ?? "Kurir"}

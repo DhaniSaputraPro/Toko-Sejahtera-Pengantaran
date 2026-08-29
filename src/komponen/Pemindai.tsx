@@ -116,7 +116,9 @@ export function Pemindai({
         hentikan();
         return;
       }
-      setAsing("QR itu bukan undangan kurir. Pindai QR dari layar admin atau dari surat jalan.");
+      setAsing(
+        "QR itu bukan undangan pengantaran. Pindai QR dari layar admin atau dari lembar rit.",
+      );
     }
 
     return () => {

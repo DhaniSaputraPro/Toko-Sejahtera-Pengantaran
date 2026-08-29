@@ -3,6 +3,7 @@ import { intipRit, klaimRit, type IntipRit } from "@/lib/kurir";
 import { simpanSesi, type ProfilKurir } from "@/lib/sesi";
 import { rp } from "@/lib/format";
 import { IkonPaket, IkonPeringatan, IkonTruk } from "@/komponen/Ikon";
+import { LogoToko } from "@/komponen/LogoToko";
 
 const KENDARAAN = [
   "Motor",
@@ -51,7 +52,7 @@ export function LayarDaftar({
         setRit(await intipRit(token));
       } catch (e) {
         setGalatAwal(
-          e instanceof Error ? e.message : "Surat jalan tidak terbaca.",
+          e instanceof Error ? e.message : "Rit tidak terbaca.",
         );
       }
     })();
@@ -102,14 +103,14 @@ export function LayarDaftar({
           </span>
           <div>
             <div className="judul" style={{ marginBottom: 6 }}>
-              Surat jalan tidak berlaku
+              Rit tidak berlaku
             </div>
             <div className="lembut" style={{ maxWidth: 330 }}>
               {galatAwal}
             </div>
           </div>
           <div className="samar" style={{ maxWidth: 330 }}>
-            Kode berlaku sehari. Minta lembar baru ke toko.
+            Kode berlaku sehari. Minta lembar rit baru ke toko.
           </div>
         </div>
       </div>
@@ -120,24 +121,13 @@ export function LayarDaftar({
     <div className="layar">
       <div className="isi">
         <div style={{ textAlign: "center", paddingTop: 8 }}>
-          <span
-            style={{
-              display: "inline-grid",
-              placeItems: "center",
-              width: 60,
-              height: 60,
-              borderRadius: 19,
-              background: "var(--biru-lembut)",
-              color: "var(--biru)",
-              marginBottom: 12,
-            }}
-          >
-            <IkonTruk ukuran={29} />
+          <span style={{ display: "inline-block", marginBottom: 12 }}>
+            <LogoToko ukuran={34} kotak={60} />
           </span>
           <div className="judul-besar">{diambil ? "Sudah diambil" : "Ambil antaran ini"}</div>
           <div className="lembut" style={{ marginTop: 4 }}>
             {diambil
-              ? "Sudah lebih dulu diambil kurir lain."
+              ? "Sudah lebih dulu diambil pengantar lain."
               : "Siapa lebih dulu mengisi, dia yang dapat."}
           </div>
         </div>
@@ -199,7 +189,7 @@ export function LayarDaftar({
                 color: "var(--kuning)",
               }}
             >
-              Kurir lain lebih cepat
+              Pengantar lain lebih cepat
             </div>
             <div className="lembut" style={{ color: "var(--kuning)" }}>
               Tunggu sebaran berikutnya. Kalau ini memang milik Anda, isi nomor WhatsApp yang{" "}

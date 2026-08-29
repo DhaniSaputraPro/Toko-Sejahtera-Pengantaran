@@ -3,6 +3,7 @@ import { SesiTidakBerlaku, ambilRiwayat, type Riwayat } from "@/lib/kurir";
 import type { ProfilKurir } from "@/lib/sesi";
 import { rp, tampilTelepon, tanggalJam } from "@/lib/format";
 import { Pemindai } from "@/komponen/Pemindai";
+import { PilihTema } from "@/komponen/PilihTema";
 import { jalurDari, kameraAda } from "@/lib/pindai";
 import { IkonKeluar, IkonOrang, IkonPaket, IkonQr, IkonTruk } from "@/komponen/Ikon";
 
@@ -84,17 +85,19 @@ export function LayarSaya({
         </div>
       </div>
 
-      {/* Surat jalan sampai ke tangan kurir SETELAH ia masuk — dititipkan staf
-          gudang, kadang di tengah rute. Tanpa tombol ini ia harus keluar dari
-          aplikasi, membuka kamera bawaan, dan kembali lewat peramban ke tempat
-          yang sedang dipegangnya. Tombolnya berdiri sendiri tanpa kartu dan
-          tanpa keterangan: yang ditulisnya sudah menyebutkan seluruh isinya. */}
+      {/* Lembar rit sampai ke tangan pengantar SETELAH ia masuk — dititipkan
+          staf gudang, kadang di tengah rute. Tanpa tombol ini ia harus keluar
+          dari aplikasi, membuka kamera bawaan, dan kembali lewat peramban ke
+          tempat yang sedang dipegangnya. Tombolnya berdiri sendiri tanpa kartu
+          dan tanpa keterangan: yang ditulisnya sudah menyebutkan isinya. */}
       {kameraAda() && (
         <button className="tombol tombol-penuh" onClick={() => setPindai(true)}>
           <IkonQr ukuran={18} />
-          Pindai surat jalan
+          Pindai rit
         </button>
       )}
+
+      <PilihTema />
 
       <div className="judul-kecil" style={{ padding: "4px 4px 0" }}>
         Riwayat antaran
@@ -148,8 +151,8 @@ export function LayarSaya({
 
       {pindai && (
         <Pemindai
-          judul="Pindai surat jalan"
-          petunjuk="Arahkan ke QR di lembar surat jalan."
+          judul="Pindai rit"
+          petunjuk="Arahkan ke QR di lembar rit."
           tutup={() => setPindai(false)}
           terima={(teks) => {
             const jalur = jalurDari(teks);
