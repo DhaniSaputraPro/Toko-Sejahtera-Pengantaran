@@ -1,34 +1,43 @@
 import { useState } from "react";
-import { PILIHAN, pasangTema, temaTersimpan, type Tema } from "@/lib/tema";
+import { pasangTema, temaTampil } from "@/lib/tema";
+import { IkonBulan, IkonMatahari } from "@/komponen/Ikon";
 
 /**
- * Pengatur tema, berbentuk kendali bersegmen — bentuk yang dipakai macOS untuk
- * pertanyaan yang jawabannya sedikit dan saling meniadakan.
+ * Sakelar terang/gelap: dua ikon, dan yang menyala adalah yang sedang tampil.
  *
- * Tiga pilihan, bukan satu sakelar. "Ikut HP" bukan kemewahan: itulah yang
- * membuat aplikasinya gelap sendiri saat HP kurir gelap sendiri di malam hari,
- * dan itu yang benar untuk hampir semua orang. Dua yang lain untuk yang
- * matanya berkata lain.
+ * Pilihan "ikut HP" dibuang dari layar, bukan dari kode. Sebelum kurir menyentuh
+ * apa pun, aplikasinya MEMANG masih ikut HP — dan sakelar ini cuma menunjukkan
+ * hasilnya. Yang ditawarkan ke orang yang sedang berdiri di tepi jalan adalah
+ * dua keadaan yang bisa ia lihat, bukan tiga kata yang harus ia bandingkan.
  */
-export function PilihTema() {
-  const [tema, setTema] = useState<Tema>(temaTersimpan);
+export function PilihTema({ className }: { className?: string }) {
+  const [tampil, setTampil] = useState<"terang" | "gelap">(temaTampil);
+
+  const pilih = (t: "terang" | "gelap") => {
+    pasangTema(t);
+    setTampil(t);
+  };
 
   return (
-    <div className="segmen" role="group" aria-label="Tema tampilan">
-      {PILIHAN.map((p) => (
-        <button
-          key={p.nilai}
-          type="button"
-          className="segmen-butir"
-          aria-pressed={tema === p.nilai}
-          onClick={() => {
-            pasangTema(p.nilai);
-            setTema(p.nilai);
-          }}
-        >
-          {p.label}
-        </button>
-      ))}
+    <div className={`segmen segmen-ikon${className ? ` ${className}` : ""}`} role="group">
+      <button
+        type="button"
+        className="segmen-butir"
+        aria-pressed={tampil === "terang"}
+        aria-label="Tampilan terang"
+        onClick={() => pilih("terang")}
+      >
+        <IkonMatahari ukuran={17} />
+      </button>
+      <button
+        type="button"
+        className="segmen-butir"
+        aria-pressed={tampil === "gelap"}
+        aria-label="Tampilan gelap"
+        onClick={() => pilih("gelap")}
+      >
+        <IkonBulan ukuran={17} />
+      </button>
     </div>
   );
 }

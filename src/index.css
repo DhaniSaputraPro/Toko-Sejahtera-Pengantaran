@@ -442,6 +442,25 @@ a {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.09);
 }
 
+/* Ragam berikon: dua petak kecil selebar isinya, bukan selebar layar. Dipakai
+   di bilah atas, tempat ia harus mengalah pada nama yang di sebelahnya. */
+.segmen-ikon {
+  grid-auto-columns: auto;
+  flex: none;
+}
+
+.segmen-ikon .segmen-butir {
+  display: grid;
+  place-items: center;
+  min-height: 30px;
+  padding: 0 11px;
+}
+
+/* Di layar masuk ia berdiri sendiri di tengah, bukan melar selebar kolom. */
+.segmen-tengah {
+  align-self: center;
+}
+
 /* -------------------------------- medan --------------------------------- */
 
 .medan {

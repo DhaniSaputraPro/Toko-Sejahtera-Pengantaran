@@ -122,7 +122,7 @@ export function LayarDaftar({
       <div className="isi">
         <div style={{ textAlign: "center", paddingTop: 8 }}>
           <span style={{ display: "inline-block", marginBottom: 12 }}>
-            <LogoToko ukuran={34} kotak={60} />
+            <LogoToko ukuran={56} />
           </span>
           <div className="judul-besar">{diambil ? "Sudah diambil" : "Ambil antaran ini"}</div>
           <div className="lembut" style={{ marginTop: 4 }}>

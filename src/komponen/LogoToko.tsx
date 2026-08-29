@@ -6,12 +6,16 @@ import { IkonTruk } from "@/komponen/Ikon";
  * Logo aplikasi: ikon toko yang sama dengan yang dipasang di tab peramban,
  * diatur staf di halaman Identitas pada admin.
  *
+ * Digambar apa adanya, tanpa kotak putih di belakangnya. Ikon toko sudah punya
+ * bentuk dan warnanya sendiri; membingkainya lagi berarti menggambar dua bentuk
+ * untuk satu benda, dan yang kedua bukan milik siapa pun.
+ *
  * Truk bawaan tetap ada sebagai jaring: ia yang tampil selama ikonnya belum
  * sampai, saat kolomnya memang kosong, dan saat berkasnya gagal dimuat. Logo
  * yang kadang-kadang jadi kotak kosong lebih buruk daripada logo yang sama
  * untuk semua toko.
  */
-export function LogoToko({ ukuran, kotak }: { ukuran: number; kotak: number }) {
+export function LogoToko({ ukuran }: { ukuran: number }) {
   const [url, setUrl] = useState<string | null>(null);
   const [gagal, setGagal] = useState(false);
 
@@ -23,35 +27,28 @@ export function LogoToko({ ukuran, kotak }: { ukuran: number; kotak: number }) {
     };
   }, []);
 
-  const pakaiIkon = url && !gagal;
+  if (url && !gagal) {
+    return (
+      <img
+        src={url}
+        alt=""
+        width={ukuran}
+        height={ukuran}
+        onError={() => setGagal(true)}
+        style={{
+          width: ukuran,
+          height: ukuran,
+          objectFit: "contain",
+          flex: "none",
+          display: "block",
+        }}
+      />
+    );
+  }
 
   return (
-    <span
-      style={{
-        display: "grid",
-        placeItems: "center",
-        flex: "none",
-        width: kotak,
-        height: kotak,
-        borderRadius: kotak >= 56 ? 20 : 980,
-        background: pakaiIkon ? "var(--kartu)" : "var(--biru)",
-        border: pakaiIkon ? "1px solid var(--garis)" : undefined,
-        color: "#fff",
-        overflow: "hidden",
-      }}
-    >
-      {pakaiIkon ? (
-        <img
-          src={url}
-          alt=""
-          width={ukuran}
-          height={ukuran}
-          onError={() => setGagal(true)}
-          style={{ width: ukuran, height: ukuran, objectFit: "contain", display: "block" }}
-        />
-      ) : (
-        <IkonTruk ukuran={ukuran} />
-      )}
+    <span style={{ display: "grid", placeItems: "center", flex: "none", color: "var(--biru)" }}>
+      <IkonTruk ukuran={ukuran} />
     </span>
   );
 }

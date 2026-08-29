@@ -9,6 +9,7 @@ import { LayarTugas } from "@/layar/Tugas";
 import { LayarSaya } from "@/layar/Saya";
 import { IkonOrang, IkonPaket, IkonPeringatan } from "@/komponen/Ikon";
 import { LogoToko } from "@/komponen/LogoToko";
+import { PilihTema } from "@/komponen/PilihTema";
 
 /**
  * Perutean seadanya, dan memang cukup segini.
@@ -127,23 +128,24 @@ export function Aplikasi() {
   return (
     <div className="layar">
       <header className="bilah-atas">
-        <LogoToko ukuran={20} kotak={34} />
-        <span style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ display: "block", fontWeight: 620, lineHeight: 1.25 }}>
-            {profil?.nama ?? "Kurir"}
-          </span>
-          <span
-            className="samar"
-            style={{
-              display: "block",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {profil?.toko.nama ?? "Toko Sejahtera"}
-          </span>
+        <LogoToko ukuran={30} />
+        <span
+          style={{
+            flex: 1,
+            minWidth: 0,
+            fontWeight: 620,
+            fontSize: 16,
+            letterSpacing: "-0.018em",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {profil?.nama ?? "Pengantaran"}
         </span>
+        {/* Sakelar tema tinggal di bilah, bukan di tab Saya: yang mengubahnya
+            adalah matahari yang berpindah, bukan pengaturan yang dicari. */}
+        <PilihTema />
       </header>
 
       {tab === "tugas" ? (

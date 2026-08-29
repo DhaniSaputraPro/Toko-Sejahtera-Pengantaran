@@ -23,7 +23,7 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
     <div className="layar">
       <div className="isi" style={{ justifyContent: "center", gap: 16 }}>
         <div style={{ display: "grid", justifyItems: "center", gap: 12 }}>
-          <LogoToko ukuran={38} kotak={64} />
+          <LogoToko ukuran={64} />
           <div className="judul-besar">Pengantaran Toko Sejahtera</div>
         </div>
 
@@ -63,7 +63,7 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           )}
         </div>
 
-        <PilihTema />
+        <PilihTema className="segmen-tengah" />
       </div>
 
       {pindai && (

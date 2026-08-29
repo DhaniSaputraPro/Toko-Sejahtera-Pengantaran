@@ -117,10 +117,21 @@ pemasang ikon tab, bilah atas, dan layar masuk menanyakan hal yang sama, dan
 tiga permintaan untuk satu jawaban adalah tiga permintaan di jaringan seluler
 yang sedang dipakai memuat daftar antar.
 
+Digambar apa adanya, tanpa kotak putih di belakangnya: ikon toko sudah punya
+bentuk dan warnanya sendiri, dan membingkainya lagi berarti menggambar dua
+bentuk untuk satu benda.
+
 Truk bawaan tetap ada sebagai jaring — tampil selama ikonnya belum sampai, saat
 kolomnya kosong, dan saat berkasnya gagal dimuat.
 
-### Terang, gelap, atau ikut HP
+### Terang atau gelap, satu sakelar di bilah atas
+
+Dua ikon — matahari dan bulan — di bilah atas, dan yang menyala adalah yang
+sedang tampil. Pilihan "ikut HP" ada di KODE tapi tidak di layar: sebelum
+pengantar menyentuh apa pun, aplikasinya memang masih ikut HP, dan sakelar itu
+cuma menunjukkan hasilnya. Yang ditawarkan ke orang yang sedang berdiri di tepi
+jalan adalah dua keadaan yang bisa ia lihat, bukan tiga kata yang harus ia
+bandingkan.
 
 `src/lib/tema.ts` menulis satu atribut di `<html>`; sisanya urusan CSS. Pilihan
 `sistem` MENGHAPUS atributnya, bukan mengisinya — dengan begitu

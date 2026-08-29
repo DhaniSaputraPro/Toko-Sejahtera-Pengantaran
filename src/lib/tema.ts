@@ -8,12 +8,6 @@ export type Tema = "sistem" | "terang" | "gelap";
 
 const KUNCI = "kurir.tema";
 
-export const PILIHAN: { nilai: Tema; label: string }[] = [
-  { nilai: "terang", label: "Terang" },
-  { nilai: "gelap", label: "Gelap" },
-  { nilai: "sistem", label: "Ikut HP" },
-];
-
 export function temaTersimpan(): Tema {
   try {
     const t = localStorage.getItem(KUNCI);
@@ -21,6 +15,19 @@ export function temaTersimpan(): Tema {
   } catch {
     return "sistem";
   }
+}
+
+/**
+ * Tema yang BENAR-BENAR tampil sekarang.
+ *
+ * Yang disimpan boleh `sistem`; yang dilihat mata tidak pernah "sistem". Sakelar
+ * matahari/bulan menyalakan salah satunya, jadi ia perlu tahu yang mana yang
+ * sedang menyala — termasuk sebelum kurir pernah memilih apa pun.
+ */
+export function temaTampil(): "terang" | "gelap" {
+  const t = temaTersimpan();
+  if (t !== "sistem") return t;
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "gelap" : "terang";
 }
 
 /**

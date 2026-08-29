@@ -73,7 +73,7 @@ export function LayarMasuk({
           </>
         ) : (
           <>
-            <LogoToko ukuran={38} kotak={64} />
+            <LogoToko ukuran={64} />
             <div>
               <div className="judul">Menyiapkan akun…</div>
             </div>

@@ -3,7 +3,6 @@ import { SesiTidakBerlaku, ambilRiwayat, type Riwayat } from "@/lib/kurir";
 import type { ProfilKurir } from "@/lib/sesi";
 import { rp, tampilTelepon, tanggalJam } from "@/lib/format";
 import { Pemindai } from "@/komponen/Pemindai";
-import { PilihTema } from "@/komponen/PilihTema";
 import { jalurDari, kameraAda } from "@/lib/pindai";
 import { IkonKeluar, IkonOrang, IkonPaket, IkonQr, IkonTruk } from "@/komponen/Ikon";
 
@@ -96,8 +95,6 @@ export function LayarSaya({
           Pindai rit
         </button>
       )}
-
-      <PilihTema />
 
       <div className="judul-kecil" style={{ padding: "4px 4px 0" }}>
         Riwayat antaran
