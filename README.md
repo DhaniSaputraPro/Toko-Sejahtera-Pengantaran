@@ -105,6 +105,34 @@ jaringan seluler.
 Yang paling tidak terpakai justru bagian auth-nya: kurir **tidak punya akun
 Supabase**. Yang dipegangnya token sesi peranti yang dikirim sebagai argumen RPC.
 
+### Temanya mengikuti macOS/iOS
+
+Seluruh warna, bentuk, dan bobot huruf ada di `src/index.css` sebagai peubah —
+tidak ada satu pun warna yang ditulis langsung di dalam komponen. Menggantinya
+di satu tempat mengganti seluruh aplikasi, **termasuk mode gelapnya**.
+
+Empat hal yang dipinjam dari sana, dan alasannya bukan gaya-gayaan:
+
+| Yang dipinjam | Kenapa untuk aplikasi ini |
+| --- | --- |
+| Warna semantik (`--teks`, `--teks-lembut`, `--garis`) | Mode gelap tinggal menukar isinya, bukan menulis ulang tiap layar |
+| Garis rambut + bayangan nyaris nol | Yang memisahkan isi adalah ruang kosong; kotak bertumpuk memakan layar |
+| Bahan buram di bilah atas dan bawah | Kurir tetap tahu daftarnya masih bergulir di baliknya |
+| Bobot huruf 590–680, bukan 700–800 | Di layar kecil di bawah matahari, huruf tebal jadi gumpalan tinta |
+
+Dua tempat sengaja **menyimpang** dari palet Apple, dan keduanya soal keterbacaan
+di bawah sinar langsung:
+
+- Birunya `#0071e3`, bukan `#007aff` bawaan iOS. Di sini biru sering jadi
+  **tulisan** di atas putih, dan yang bawaan itu cuma 3,6:1 — tidak lolos.
+- Hijau untuk tulisan dan hijau untuk latar tombol dipisah (`--hijau` dan
+  `--hijau-isi`). Tulisan putih di atas hijau terang iOS cuma 1,9:1; tombol
+  "Sudah saya jemput" akan hilang di tangan kurir yang berdiri di terik.
+
+Mode gelap ikut karena kurir juga bekerja setelah magrib. `index.html` menyetel
+`color-scheme: light dark` dan dua `theme-color`, jadi bilah peramban pun ikut
+berubah.
+
 ### Layarnya irit kata, dan itu aturan
 
 Yang membaca layar ini sedang berdiri di tepi jalan, sering di bawah matahari,

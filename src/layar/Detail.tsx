@@ -122,7 +122,7 @@ export function LembarTugas({
 
         {/* Tujuan */}
         <div className="kartu" style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 19, fontWeight: 700 }}>{tugas.nama_penerima}</div>
+          <div className="judul">{tugas.nama_penerima}</div>
           <div style={{ marginTop: 6, lineHeight: 1.5 }}>
             {tugas.alamat || (
               <span style={{ color: "var(--merah)" }}>Alamat tidak ditulis — hubungi dulu.</span>
@@ -202,12 +202,10 @@ export function LembarTugas({
             style={{
               marginBottom: 12,
               background: "var(--hijau-lembut)",
-              borderColor: "rgba(20,128,60,.22)",
+              borderColor: "transparent",
             }}
           >
-            <div style={{ fontSize: 22, fontWeight: 800 }} className="angka">
-              Tagih {rp(tugas.total)}
-            </div>
+            <div className="judul-besar angka">Tagih {rp(tugas.total)}</div>
             <div className="samar" style={{ color: "var(--hijau)" }}>
               Bayar di tempat
             </div>
@@ -273,7 +271,9 @@ export function LembarTugas({
 
         {mode === "selesai" && (
           <div className="kartu" style={{ display: "grid", gap: 12 }}>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>Sampai di tujuan</div>
+            <div style={{ fontWeight: 620, fontSize: 16.5, letterSpacing: "-0.018em" }}>
+              Sampai di tujuan
+            </div>
 
             {cod && (
               <label className="baris" style={{ gap: 10, cursor: "pointer", alignItems: "flex-start" }}>
@@ -364,7 +364,9 @@ export function LembarTugas({
 
         {mode === "gagal" && (
           <div className="kartu" style={{ display: "grid", gap: 12 }}>
-            <div style={{ fontWeight: 700, fontSize: 16 }}>Antaran gagal</div>
+            <div style={{ fontWeight: 620, fontSize: 16.5, letterSpacing: "-0.018em" }}>
+              Antaran gagal
+            </div>
             <div className="samar">Paket kembali ke toko.</div>
             <textarea
               className="medan"

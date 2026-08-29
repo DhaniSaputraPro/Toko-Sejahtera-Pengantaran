@@ -32,7 +32,7 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
               placeItems: "center",
               width: 64,
               height: 64,
-              borderRadius: 22,
+              borderRadius: 20,
               background: "var(--biru-lembut)",
               color: "var(--biru)",
               marginBottom: 14,
@@ -40,7 +40,7 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
           >
             <IkonTruk ukuran={30} />
           </div>
-          <div style={{ fontSize: 21, fontWeight: 700 }}>Kurir Toko Sejahtera</div>
+          <div className="judul-besar">Kurir Toko Sejahtera</div>
           <div className="lembut" style={{ marginTop: 6 }}>
             Pindai QR dari admin toko atau dari surat jalan.
           </div>
@@ -60,9 +60,9 @@ export function LayarBelumMasuk({ buka }: { buka: (jalur: string) => void }) {
             kurirnya tidak punya jalan lain sama sekali. */}
         {!pakaiTautan ? (
           <button
-            className="tombol tombol-kecil"
+            className="tombol tombol-kecil tombol-polos"
             onClick={() => setPakaiTautan(true)}
-            style={{ alignSelf: "center", background: "none", border: 0, color: "var(--biru)" }}
+            style={{ alignSelf: "center" }}
           >
             {bisaPindai ? "Punya tautan undangan?" : "Masuk dengan tautan undangan"}
           </button>

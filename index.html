@@ -8,8 +8,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5"
     />
-    <meta name="theme-color" content="#f2f2f5" />
-    <meta name="color-scheme" content="light" />
+    <!-- Warna bilah peramban ikut mode peranti, sama seperti tema di dalamnya. -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f7" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="description" content="Aplikasi kurir Toko Sejahtera — daftar antar dan navigasi." />
     <!-- Daftar antar memuat alamat rumah pembeli. Tidak ada satu pun bagian
          aplikasi ini yang boleh muncul di hasil pencarian. -->

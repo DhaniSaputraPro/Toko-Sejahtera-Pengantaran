@@ -49,7 +49,7 @@ export function LayarSaya({
               placeItems: "center",
               width: 48,
               height: 48,
-              borderRadius: 16,
+              borderRadius: 980,
               background: "var(--biru-lembut)",
               color: "var(--biru)",
             }}
@@ -57,7 +57,7 @@ export function LayarSaya({
             <IkonOrang ukuran={24} />
           </span>
           <span style={{ flex: 1, minWidth: 0 }}>
-            <span style={{ display: "block", fontSize: 18, fontWeight: 700 }}>
+            <span className="judul" style={{ display: "block" }}>
               {profil?.nama ?? "—"}
             </span>
             <span className="lembut angka">

@@ -51,7 +51,7 @@ export function LayarMasuk({
                 placeItems: "center",
                 width: 64,
                 height: 64,
-                borderRadius: 22,
+                borderRadius: 20,
                 background: "var(--merah-lembut)",
                 color: "var(--merah)",
               }}
@@ -59,7 +59,9 @@ export function LayarMasuk({
               <IkonPeringatan ukuran={30} />
             </div>
             <div>
-              <div style={{ fontSize: 19, fontWeight: 700, marginBottom: 6 }}>Belum bisa masuk</div>
+              <div className="judul" style={{ marginBottom: 6 }}>
+                Belum bisa masuk
+              </div>
               <div className="lembut" style={{ maxWidth: 320 }}>
                 {galat}
               </div>
@@ -76,7 +78,7 @@ export function LayarMasuk({
                 placeItems: "center",
                 width: 64,
                 height: 64,
-                borderRadius: 22,
+                borderRadius: 20,
                 background: "var(--biru-lembut)",
                 color: "var(--biru)",
               }}
@@ -84,7 +86,7 @@ export function LayarMasuk({
               <IkonTruk ukuran={30} />
             </div>
             <div>
-              <div style={{ fontSize: 19, fontWeight: 700 }}>Menyiapkan akun…</div>
+              <div className="judul">Menyiapkan akun…</div>
             </div>
             <div className="putar" />
           </>

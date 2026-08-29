@@ -1,32 +1,102 @@
-/* Aplikasi kurir — dibaca sambil berdiri di tepi jalan, sering di bawah
-   matahari, kadang dengan satu tangan. Tiga hal yang menentukan seluruh gaya
-   di berkas ini:
-
-   1. KONTRAS TINGGI. Abu-abu tipis yang cantik di monitor kantor hilang sama
-      sekali di layar HP di bawah sinar langsung.
-   2. SASARAN KETUKAN BESAR. Tidak ada tombol di bawah 44px; jari yang basah
-      kehujanan tidak bisa mengenai sasaran kecil.
-   3. TIDAK ADA ANIMASI PANJANG. Setiap ketukan harus terasa langsung dijawab. */
+/* Aplikasi kurir — bahasa visualnya mengikuti macOS/iOS.
+ *
+ * Bukan peniruan gaya. Empat hal yang dipinjam dari sana memang menjawab
+ * keadaan tempat aplikasi ini dipakai — di tepi jalan, sering di bawah
+ * matahari, kadang dengan satu tangan:
+ *
+ * 1. WARNA SEMANTIK, bukan warna suka-suka. Satu daftar label/latar/pemisah
+ *    yang dipakai seluruh layar; menggantinya di satu tempat mengganti seluruh
+ *    aplikasi, termasuk mode gelap.
+ * 2. GARIS RAMBUT, bukan bingkai. Kartu dipisahkan oleh garis setipis mungkin
+ *    dan bayangan yang nyaris tak terlihat. Yang memisahkan isinya adalah ruang
+ *    kosong, bukan kotak bertumpuk.
+ * 3. BAHAN BURAM. Bilah atas dan bilah tab meneruskan warna yang lewat di
+ *    baliknya, jadi kurir tetap tahu daftarnya masih bergulir di bawah sana.
+ * 4. BOBOT HURUF SEDANG. SF Pro pada 600 sudah tegas; 800 di layar kecil
+ *    berubah jadi gumpalan tinta, apalagi di bawah sinar langsung.
+ *
+ * Mode gelap ikut, karena kurir juga bekerja setelah magrib — dan karena
+ * setengah bahasa desain ini memang tinggal di sana.
+ */
 
 :root {
-  --latar: #f2f2f5;
+  color-scheme: light dark;
+
+  /* ---- latar ---- */
+  --latar: #f5f5f7;
   --kartu: #ffffff;
-  --teks: #16161a;
-  --teks-lembut: #5c5c66;
-  --teks-samar: #8a8a94;
-  --garis: rgba(0, 0, 0, 0.09);
-  --biru: #0a6fd8;
-  --biru-lembut: #e6f0fd;
-  --hijau: #14803c;
-  --hijau-lembut: #e2f5e9;
-  --kuning: #7a5b16;
-  --kuning-lembut: #fdf2d9;
-  --ungu: #5b34a0;
-  --ungu-lembut: #efe8fb;
-  --merah: #b3261e;
-  --merah-lembut: #fce9e8;
-  --radius: 16px;
-  --bayang: 0 1px 3px rgba(0, 0, 0, 0.07), 0 6px 16px -12px rgba(0, 0, 0, 0.24);
+  --kartu-tekan: #f0f0f3;
+  --selaput: rgba(245, 245, 247, 0.72);
+
+  /* ---- tulisan ---- */
+  --teks: #1d1d1f;
+  --teks-lembut: rgba(60, 60, 67, 0.72);
+  --teks-samar: rgba(60, 60, 67, 0.5);
+
+  /* ---- garis ---- */
+  --garis: rgba(60, 60, 67, 0.16);
+  --garis-tegas: rgba(60, 60, 67, 0.26);
+
+  /* ---- warna sistem ----
+     Biru #0071e3 dipakai, bukan #007aff bawaan iOS: yang pertama masih terbaca
+     sebagai TULISAN di atas putih (4,5:1), yang kedua tidak — dan di sini biru
+     sering jadi tulisan, bukan cuma latar tombol. */
+  --biru: #0071e3;
+  --biru-lembut: rgba(0, 113, 227, 0.1);
+  --hijau: #248a3d;
+  --hijau-lembut: rgba(52, 199, 89, 0.14);
+  /* Hijau untuk TULISAN dan hijau untuk LATAR TOMBOL adalah dua warna berbeda.
+     Yang pertama boleh terang di mode gelap; yang kedua tidak — tulisan putih
+     di atas hijau terang iOS cuma 1,9:1, tidak terbaca di bawah matahari
+     maupun di dalam gudang. */
+  --hijau-isi: #248a3d;
+  --kuning: #9a6100;
+  --kuning-lembut: rgba(255, 149, 0, 0.16);
+  --ungu: #7c3aad;
+  --ungu-lembut: rgba(175, 82, 222, 0.13);
+  --merah: #d70015;
+  --merah-lembut: rgba(255, 59, 48, 0.12);
+  --abu-lembut: rgba(60, 60, 67, 0.09);
+
+  /* ---- bentuk ---- */
+  --radius: 14px;
+  --radius-kecil: 11px;
+  --bayang: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --bayang-apung: 0 8px 34px rgba(0, 0, 0, 0.14);
+  --cincin: 0 0 0 3.5px rgba(0, 113, 227, 0.28);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --latar: #000000;
+    --kartu: #1c1c1e;
+    --kartu-tekan: #2c2c2e;
+    --selaput: rgba(28, 28, 30, 0.74);
+
+    --teks: #ffffff;
+    --teks-lembut: rgba(235, 235, 245, 0.62);
+    --teks-samar: rgba(235, 235, 245, 0.42);
+
+    --garis: rgba(84, 84, 88, 0.55);
+    --garis-tegas: rgba(84, 84, 88, 0.8);
+
+    --biru: #0a84ff;
+    --biru-lembut: rgba(10, 132, 255, 0.2);
+    --hijau: #32d74b;
+    --hijau-lembut: rgba(48, 209, 88, 0.2);
+    --hijau-isi: #1e7a35;
+    --kuning: #ffb340;
+    --kuning-lembut: rgba(255, 159, 10, 0.22);
+    --ungu: #d08bf5;
+    --ungu-lembut: rgba(191, 90, 242, 0.22);
+    --merah: #ff6961;
+    --merah-lembut: rgba(255, 69, 58, 0.22);
+    --abu-lembut: rgba(235, 235, 245, 0.14);
+
+    --bayang: none;
+    --bayang-apung: 0 8px 34px rgba(0, 0, 0, 0.6);
+    --cincin: 0 0 0 3.5px rgba(10, 132, 255, 0.4);
+  }
 }
 
 * {
@@ -45,13 +115,15 @@ body {
   background: var(--latar);
   color: var(--teks);
   font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable", "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   font-size: 15px;
   line-height: 1.45;
+  /* SF Pro dirancang dengan jarak huruf rapat; tanpa ini tulisannya terbaca
+     seperti Helvetica yang direnggangkan. */
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
-  /* Menahan tarik-untuk-muat-ulang bawaan Chrome Android: kurir menggulir
-     daftar antar dengan ibu jari, dan gulir ke atas dari puncak daftar tidak
-     boleh membuang halaman yang sedang dibaca. */
+  -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: contain;
 }
 
@@ -60,11 +132,18 @@ input,
 textarea,
 select {
   font: inherit;
+  letter-spacing: inherit;
   color: inherit;
 }
 
 a {
   color: var(--biru);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--cincin);
+  border-radius: 8px;
 }
 
 /* ------------------------------- kerangka ------------------------------- */
@@ -78,6 +157,9 @@ a {
   background: var(--latar);
 }
 
+/* Bahan buram: yang lewat di baliknya tetap terasa. `saturate` ikut karena
+   tanpa itu warna yang tertangkap blur tampak pudar — inilah bedanya jendela
+   macOS dengan kaca susu biasa. */
 .bilah-atas {
   position: sticky;
   top: 0;
@@ -85,10 +167,11 @@ a {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px calc(12px + env(safe-area-inset-top, 0px));
-  padding-top: calc(12px + env(safe-area-inset-top, 0px));
-  background: rgba(242, 242, 245, 0.92);
-  backdrop-filter: blur(12px);
+  padding: 11px 16px;
+  padding-top: calc(11px + env(safe-area-inset-top, 0px));
+  background: var(--selaput);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--garis);
 }
 
@@ -97,7 +180,7 @@ a {
   padding: 14px 14px 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
 }
 
 .bilah-bawah {
@@ -106,8 +189,9 @@ a {
   z-index: 20;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: rgba(242, 242, 245, 0.94);
-  backdrop-filter: blur(12px);
+  background: var(--selaput);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-top: 1px solid var(--garis);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -116,13 +200,14 @@ a {
   appearance: none;
   border: 0;
   background: none;
-  padding: 10px 4px 11px;
+  padding: 8px 4px 9px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--teks-samar);
   cursor: pointer;
 }
@@ -141,16 +226,30 @@ a {
   padding: 14px;
 }
 
+/* Di atas latar hitam, kartu sudah terpisah oleh warnanya sendiri. Bingkai di
+   sekelilingnya cuma menggambar kotak yang tidak perlu digambar — pemisah DI
+   DALAM kartu tetap memakai garis yang sama.
+
+   Ditaruh SESUDAH `.kartu`, bukan di dalam blok token di puncak berkas: dua
+   aturan dengan kekhususan sama diputuskan oleh urutan, dan yang di puncak
+   pasti kalah. */
+@media (prefers-color-scheme: dark) {
+  .kartu {
+    border-color: transparent;
+  }
+}
+
 .kartu-ketuk {
   width: 100%;
   text-align: left;
   appearance: none;
   cursor: pointer;
   display: block;
+  transition: background-color 0.12s ease;
 }
 
 .kartu-ketuk:active {
-  background: #fafafc;
+  background: var(--kartu-tekan);
 }
 
 /* -------------------------------- lencana ------------------------------- */
@@ -160,10 +259,10 @@ a {
   align-items: center;
   gap: 4px;
   padding: 3px 9px;
-  border-radius: 999px;
+  border-radius: 980px;
   font-size: 12px;
-  font-weight: 600;
-  line-height: 1.4;
+  font-weight: 590;
+  line-height: 1.45;
   white-space: nowrap;
 }
 
@@ -188,7 +287,7 @@ a {
   color: var(--merah);
 }
 .lencana-abu {
-  background: #eeeef1;
+  background: var(--abu-lembut);
   color: var(--teks-lembut);
 }
 
@@ -199,26 +298,31 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   min-height: 46px;
   padding: 0 18px;
-  border-radius: 13px;
+  border-radius: 12px;
   border: 1px solid var(--garis);
   background: var(--kartu);
   color: var(--teks);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 590;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 0.06s ease;
+  /* Meredup saat ditekan, bukan mengerut. Itu isyarat yang dipakai seluruh
+     antarmuka Apple, dan ia tetap terlihat pada tombol selebar layar yang
+     pengerutannya nyaris tidak kentara. */
+  transition:
+    opacity 0.12s ease,
+    background-color 0.12s ease;
 }
 
 .tombol:active:not(:disabled) {
-  transform: scale(0.985);
+  opacity: 0.62;
 }
 
 .tombol:disabled {
-  opacity: 0.45;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
@@ -229,14 +333,14 @@ a {
 }
 
 .tombol-hijau {
-  background: var(--hijau);
+  background: var(--hijau-isi);
   border-color: transparent;
   color: #fff;
 }
 
 .tombol-bahaya {
   background: var(--merah-lembut);
-  border-color: rgba(179, 38, 30, 0.22);
+  border-color: transparent;
   color: var(--merah);
 }
 
@@ -248,7 +352,15 @@ a {
   min-height: 38px;
   padding: 0 13px;
   font-size: 13.5px;
-  border-radius: 11px;
+  border-radius: 10px;
+}
+
+/* Tombol tanpa bingkai — tulisan biru saja, seperti tautan pada lembar iOS. */
+.tombol-polos {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--biru);
 }
 
 /* -------------------------------- medan --------------------------------- */
@@ -257,26 +369,33 @@ a {
   width: 100%;
   min-height: 46px;
   padding: 11px 13px;
-  border-radius: 13px;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 12px;
+  border: 1px solid var(--garis-tegas);
   background: var(--kartu);
-  font-size: 15px;
+  color: var(--teks);
+  font-size: 16px; /* di bawah 16px, Safari iOS memperbesar halaman saat difokus */
   outline: none;
   resize: vertical;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.medan::placeholder {
+  color: var(--teks-samar);
 }
 
 .medan:focus {
   border-color: var(--biru);
-  box-shadow: 0 0 0 3px rgba(10, 111, 216, 0.16);
+  box-shadow: var(--cincin);
 }
 
 /* ------------------------------- potongan ------------------------------- */
 
 .judul-kecil {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 590;
+  letter-spacing: 0;
   color: var(--teks-samar);
 }
 
@@ -301,11 +420,27 @@ a {
   font-variant-numeric: tabular-nums;
 }
 
+/* Judul: makin besar hurufnya, makin rapat jaraknya. Aturan itu yang membuat
+   tulisan besar SF terlihat padu alih-alih berserakan. */
+.judul {
+  font-size: 20px;
+  font-weight: 640;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+}
+
+.judul-besar {
+  font-size: 26px;
+  font-weight: 680;
+  letter-spacing: -0.028em;
+  line-height: 1.2;
+}
+
 .pesan-galat {
   background: var(--merah-lembut);
-  border: 1px solid rgba(179, 38, 30, 0.2);
+  border: 1px solid transparent;
   color: var(--merah);
-  border-radius: 13px;
+  border-radius: 12px;
   padding: 12px 14px;
   font-size: 14px;
   line-height: 1.5;
@@ -317,11 +452,13 @@ a {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: rgba(0, 0, 0, 0.42);
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  animation: pudar 0.12s ease;
+  animation: pudar 0.18s ease;
 }
 
 .lembar {
@@ -330,17 +467,19 @@ a {
   max-height: 92vh;
   overflow-y: auto;
   background: var(--latar);
-  border-radius: 22px 22px 0 0;
+  border-radius: 20px 20px 0 0;
+  box-shadow: var(--bayang-apung);
   padding: 8px 14px calc(18px + env(safe-area-inset-bottom, 0px));
-  animation: naik 0.16s ease;
+  /* Kurva Apple: lembarnya naik cepat lalu berhenti tanpa memantul. */
+  animation: naik 0.26s cubic-bezier(0.32, 0.72, 0, 1);
   overscroll-behavior: contain;
 }
 
 .pegangan {
-  width: 38px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.16);
+  width: 36px;
+  height: 5px;
+  border-radius: 980px;
+  background: var(--garis-tegas);
   margin: 6px auto 12px;
 }
 
@@ -352,7 +491,7 @@ a {
 
 @keyframes naik {
   from {
-    transform: translateY(14px);
+    transform: translateY(100%);
   }
 }
 
@@ -369,7 +508,7 @@ a {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.14);
+  border: 2px solid var(--garis);
   border-top-color: var(--biru);
   animation: putaran 0.7s linear infinite;
 }
@@ -378,6 +517,25 @@ a {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* -------------------------------- urutan --------------------------------- */
+
+/* Nomor urut pada kartu antaran. Daftarnya sudah tersusun dari yang terdekat;
+   angka ini yang membuat urutannya terbaca sebagai rute, bukan sebagai tumpukan
+   kartu yang kebetulan berurutan. */
+.urutan {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border-radius: 980px;
+  background: var(--biru-lembut);
+  color: var(--biru);
+  font-size: 13px;
+  font-weight: 640;
 }
 
 /* ------------------------------- pemindai -------------------------------- */
@@ -435,7 +593,7 @@ a {
   width: min(68vw, 250px);
   aspect-ratio: 1;
   border: 3px solid rgba(255, 255, 255, 0.92);
-  border-radius: 24px;
+  border-radius: 26px;
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.45);
   display: grid;
   place-items: center;
@@ -451,14 +609,16 @@ a {
   align-items: center;
   gap: 9px;
   background: rgba(0, 0, 0, 0.55);
-  border-radius: 13px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
   padding: 11px 13px;
   font-size: 13.5px;
   line-height: 1.45;
 }
 
 .pemindai-pesan-salah {
-  background: rgba(179, 38, 30, 0.9);
+  background: rgba(255, 59, 48, 0.85);
 }
 
 .pemindai-galat {
@@ -475,7 +635,9 @@ a {
 }
 
 .tombol-gelap {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-color: rgba(255, 255, 255, 0.28);
   color: #fff;
 }
@@ -487,9 +649,11 @@ a {
   width: 40px;
   height: 40px;
   flex: none;
-  border-radius: 999px;
+  border-radius: 980px;
   border: 0;
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #fff;
   cursor: pointer;
 }
@@ -497,21 +661,4 @@ a {
 .putar-terang {
   border-color: rgba(255, 255, 255, 0.3);
   border-top-color: #fff;
-}
-
-/* Nomor urut pada kartu antaran. Daftarnya sudah tersusun dari yang terdekat;
-   angka ini yang membuat urutannya terbaca sebagai rute, bukan sebagai tumpukan
-   kartu yang kebetulan berurutan. */
-.urutan {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 26px;
-  height: 26px;
-  margin-top: 1px;
-  border-radius: 9px;
-  background: var(--biru-lembut);
-  color: var(--biru);
-  font-size: 13px;
-  font-weight: 700;
 }

@@ -104,7 +104,7 @@ export function LayarTugas({ keluarSesi }: { keluarSesi: () => void }) {
             pulang bersamanya. */}
         {baris.length > 0 && (
           <div className="baris" style={{ padding: "0 4px", gap: 8 }}>
-            <strong style={{ fontSize: 17 }}>{baris.length} antaran</strong>
+            <strong className="judul">{baris.length} antaran</strong>
             {belumDijemput > 0 && (
               <span className="lencana lencana-kuning">{belumDijemput} di toko</span>
             )}
@@ -156,10 +156,10 @@ export function LayarTugas({ keluarSesi }: { keluarSesi: () => void }) {
             kembali, jadi tombol ini cuma untuk yang tidak sabar — kecil, dan
             tidak ikut mengambil perhatian dari kartu di atasnya. */}
         <button
-          className="tombol tombol-kecil"
+          className="tombol tombol-kecil tombol-polos"
           onClick={() => void muat()}
           disabled={memuat}
-          style={{ alignSelf: "center", background: "none", border: 0, color: "var(--teks-samar)" }}
+          style={{ alignSelf: "center", color: "var(--teks-samar)" }}
         >
           {memuat ? <span className="putar" /> : <IkonMuatUlang ukuran={16} />}
           {memuat ? "Memuat…" : "Muat ulang"}
@@ -231,7 +231,7 @@ function BilahPosisi({
     <button
       className="tombol tombol-penuh"
       onClick={posisi.nyalakan}
-      style={{ justifyContent: "flex-start", color: "var(--biru)" }}
+      style={{ justifyContent: "flex-start", gap: 9, color: "var(--biru)" }}
     >
       <IkonPin ukuran={18} /> Urutkan dari yang terdekat
     </button>
@@ -268,7 +268,15 @@ function KartuTugas({ urut, baris, buka }: { urut: number; baris: Baris; buka: (
         <div className="baris" style={{ gap: 10, flexWrap: "nowrap", alignItems: "flex-start" }}>
           <span className="urutan angka">{urut}</span>
           <span style={{ flex: 1, minWidth: 0 }}>
-            <span style={{ display: "block", fontSize: 16.5, fontWeight: 700, lineHeight: 1.25 }}>
+            <span
+              style={{
+                display: "block",
+                fontSize: 16.5,
+                fontWeight: 620,
+                letterSpacing: "-0.018em",
+                lineHeight: 1.25,
+              }}
+            >
               {t.nama_penerima}
             </span>
             <span className="lembut" style={{ display: "block", marginTop: 2, lineHeight: 1.4 }}>
@@ -276,7 +284,7 @@ function KartuTugas({ urut, baris, buka }: { urut: number; baris: Baris; buka: (
             </span>
           </span>
           {jarak != null && (
-            <span className="angka" style={{ fontWeight: 700, color: "var(--biru)" }}>
+            <span className="angka" style={{ fontWeight: 600, color: "var(--biru)" }}>
               {tampilJarak(jarak)}
             </span>
           )}

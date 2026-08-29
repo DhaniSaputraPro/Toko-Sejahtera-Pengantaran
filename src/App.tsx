@@ -132,7 +132,7 @@ export function Aplikasi() {
             placeItems: "center",
             width: 34,
             height: 34,
-            borderRadius: 11,
+            borderRadius: 980,
             background: "var(--biru)",
             color: "#fff",
           }}
@@ -140,7 +140,7 @@ export function Aplikasi() {
           <IkonTruk ukuran={19} />
         </span>
         <span style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ display: "block", fontWeight: 700, lineHeight: 1.2 }}>
+          <span style={{ display: "block", fontWeight: 620, lineHeight: 1.25 }}>
             {profil?.nama ?? "Kurir"}
           </span>
           <span
@@ -204,7 +204,7 @@ function LayarKonfigurasi() {
           <IkonPeringatan ukuran={40} />
         </span>
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>
+          <div className="judul" style={{ marginBottom: 6 }}>
             Aplikasi belum dikonfigurasi
           </div>
           <div className="lembut" style={{ maxWidth: 340 }}>

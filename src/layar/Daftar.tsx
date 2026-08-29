@@ -101,7 +101,7 @@ export function LayarDaftar({
             <IkonPeringatan ukuran={44} />
           </span>
           <div>
-            <div style={{ fontSize: 19, fontWeight: 700, marginBottom: 6 }}>
+            <div className="judul" style={{ marginBottom: 6 }}>
               Surat jalan tidak berlaku
             </div>
             <div className="lembut" style={{ maxWidth: 330 }}>
@@ -126,7 +126,7 @@ export function LayarDaftar({
               placeItems: "center",
               width: 60,
               height: 60,
-              borderRadius: 20,
+              borderRadius: 19,
               background: "var(--biru-lembut)",
               color: "var(--biru)",
               marginBottom: 12,
@@ -134,9 +134,7 @@ export function LayarDaftar({
           >
             <IkonTruk ukuran={29} />
           </span>
-          <div style={{ fontSize: 21, fontWeight: 700 }}>
-            {diambil ? "Sudah diambil" : "Ambil antaran ini"}
-          </div>
+          <div className="judul-besar">{diambil ? "Sudah diambil" : "Ambil antaran ini"}</div>
           <div className="lembut" style={{ marginTop: 4 }}>
             {diambil
               ? "Sudah lebih dulu diambil kurir lain."
@@ -153,7 +151,7 @@ export function LayarDaftar({
               <IkonPaket ukuran={26} />
             </span>
             <span style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ display: "block", fontWeight: 700, fontSize: 16 }}>
+              <span style={{ display: "block", fontWeight: 620, fontSize: 16.5 }}>
                 {rit.nama?.trim() || rit.kode}
               </span>
               <span className="samar">
@@ -167,7 +165,12 @@ export function LayarDaftar({
               </span>
               <span
                 className="angka"
-                style={{ fontSize: 19, fontWeight: 800, color: "var(--biru)" }}
+                style={{
+                  fontSize: 20,
+                  fontWeight: 660,
+                  letterSpacing: "-0.02em",
+                  color: "var(--biru)",
+                }}
               >
                 {rp(rit.upah)}
               </span>
